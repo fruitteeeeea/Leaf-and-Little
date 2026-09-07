@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3f0e5">
+<meta name="description" content="一颗弹珠，一座会生长的微缩花园。拨动双挡板，让每块瓦片长出新绿。完全离线的 3D 网页小游戏。">
+<title>叶间 · 一颗弹珠，一座小花园</title>
+<style>:root{--paper:#f3f0e5;--ink:#364d3d;--muted:#7d8977;--sage:#839668;--line:rgba(76,96,65,.18);--soft:#e8e9dc;--white:#fbfaf3;--serif:'Noto Serif CJK SC','Songti SC','STSong','SimSun',serif;--sans:'PingFang SC','Microsoft YaHei','Noto Sans CJK SC',sans-serif}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased;overflow:hidden;transition:background .8s}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}button:disabled{cursor:default}button:focus-visible,a:focus-visible{outline:2px solid #6b8252;outline-offset:5px;border-radius:6px}button svg,a svg,svg.icon{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}svg{flex-shrink:0}a{text-decoration:none;color:inherit}button{user-select:none}button,button svg{touch-action:manipulation}button[data-flipper]{touch-action:none}button:active:not(:disabled){transform:translateY(1px)}[hidden]{display:none!important}.icon-sprite{position:absolute;width:0;height:0;overflow:hidden}.paper-grain{position:fixed;inset:0;z-index:12;pointer-events:none;opacity:.032;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23n)' opacity='.65' d='M0 0h220v220H0z'/%3E%3C/svg%3E");mix-blend-mode:multiply}.app{max-width:1920px;min-height:680px;height:100dvh;padding:0 clamp(28px,4.8vw,88px);margin:auto;display:flex;flex-direction:column}.header{height:112px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:15;flex-shrink:0}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:43px;height:49px;border:1px solid #9caa8960;border-radius:24px 24px 9px 9px;display:grid;place-items:center;background:#e5e8d740}.brand-mark svg{width:29px;height:29px;stroke-width:1.05}.brand-name{font-family:var(--serif);font-size:24px;letter-spacing:4px;line-height:1.3}.brand-en{display:block;font-family:var(--sans);font-size:8px;letter-spacing:2.15px;margin-top:6px;font-weight:500}.header nav{display:flex;align-items:center;gap:39px}.nav-link{font-size:13px;padding:9px 0;position:relative;letter-spacing:1px}.nav-link:after{content:'';height:1px;position:absolute;bottom:1px;left:0;right:0;transform:scaleX(0);background:var(--ink);transition:transform .2s}.nav-link:hover:after,.nav-link.active:after{transform:scaleX(1)}.nav-divider{height:17px;width:1px;background:var(--line);margin-left:1px}.zen-button{border:1px solid #a7ae9559;border-radius:28px;display:flex;gap:26px;align-items:center;padding:13px 22px;font-size:12px;letter-spacing:1px;transition:background .2s}.zen-button:hover{background:#e6e8d7}.zen-button svg{width:16px;height:16px}.garden{flex:1;position:relative;min-height:0}.intro{position:relative;z-index:3;width:30%;max-width:375px;padding-top:clamp(20px,5.2vh,64px)}.eyebrow{display:flex;align-items:center;gap:10px;font-size:9px;letter-spacing:1.75px;white-space:nowrap;color:#859079;font-weight:500}.eyebrow>span{width:20px;height:1px;background:#94a185}h1{font-family:var(--serif);font-size:clamp(36px,3.35vw,54px);font-weight:500;line-height:1.48;letter-spacing:-1.9px;margin:22px -25px 16px 0;white-space:nowrap}.green-word{position:relative;color:#71895a}.green-word>svg{position:absolute;left:0;bottom:-9px;width:100%;height:12px;fill:none;stroke:#b8c29b;stroke-width:1.2;stroke-linecap:round}.intro-copy{font-size:13px;line-height:2.1;letter-spacing:.45px;margin:23px 0 25px;color:#7c8576}.growth-card{border-top:1px solid var(--line);border-bottom:1px solid var(--line);width:100%;max-width:300px;padding:19px 0 16px;margin-bottom:24px}.growth-heading{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:.7px;color:#667a5e}.growth-heading>span:first-child{display:flex;align-items:center;gap:7px}.growth-heading svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.2}.live-dot{width:5px;height:5px;border-radius:50%;background:#8ca575;margin-right:2px}.growth-main{display:flex;align-items:center;position:relative;margin:9px 0 15px;gap:18px}.percent{font-family:Georgia,serif;font-size:58px;line-height:1.1;letter-spacing:-2px;font-weight:400;min-width:99px;font-variant-numeric:tabular-nums}.percent small{font-family:var(--sans);font-size:20px;font-weight:300;letter-spacing:0;margin-left:4px}.tile-count{display:flex;flex-direction:column;font-size:10px;color:#929982;line-height:1.75}.tile-count strong{font-size:12px;color:#6b7d60;font-weight:400;letter-spacing:1.2px}.tile-count small{font-size:9px;letter-spacing:.5px}.tile-count i{font-style:normal;color:#b4b8a4;margin:0 2px}.growth-sprout{width:45px;height:62px;fill:#e5e8d8;stroke:#a7b58d;stroke-width:1.3;position:absolute;right:0;top:3px;transform:rotate(8deg)}.progress-track{height:4px;background:#dee2cf;border-radius:3px;overflow:hidden}.progress-track>div{height:100%;width:0;background:#839e62;border-radius:3px;transition:width .5s cubic-bezier(.2,.8,.2,1)}.growth-foot{display:flex;justify-content:space-between;margin-top:11px;font-size:9px;letter-spacing:.6px;color:#8b9480}.growth-foot span:last-child{color:#a1a58e}.launch-button{width:100%;max-width:300px;height:52px;border-radius:28px;background:#4f6844;color:#f8f6e9;display:flex;justify-content:space-between;align-items:center;padding:0 23px;box-shadow:0 5px 15px #4a674312;font-size:13px;letter-spacing:1.3px;transition:background .25s,box-shadow .25s}.launch-button:hover:not(:disabled){background:#405b35;box-shadow:0 7px 20px #4a674328}.launch-button:disabled{background:#dce2cd;color:#6d8060;box-shadow:none}.launch-button svg{width:18px;height:18px}.launch-hint{font-size:9px;color:#969d88;letter-spacing:.4px;margin:12px 0 26px;display:flex;gap:7px;align-items:center}.launch-hint kbd{font:8px var(--sans);border:1px solid #b5bda253;padding:1px 4px;border-radius:3px;color:#7e8a6e}.key-controls{display:flex;gap:11px;max-width:300px}.flipper-button{border:1px solid #a2ac8f49;border-radius:11px;flex:1;display:flex;align-items:center;gap:10px;position:relative;padding:10px 12px;height:50px;background:#edeedf40;transition:background .13s,box-shadow .13s}.flipper-button kbd{font:15px Georgia,serif;display:grid;place-items:center;width:27px;height:29px;border-radius:5px;border:1px solid #b8bea877;background:#f8f6ed;box-shadow:0 2px 0 #a7b08e20}.flipper-button>span:not(.flipper-line){font-size:10px;letter-spacing:.4px;text-align:left;line-height:1.5}.flipper-button small{display:block;font-size:9px;color:#98a088}.flipper-line{display:block;height:5px;width:21px;border:1px solid #799166;border-radius:5px;background:#b5c49755;transform:rotate(24deg);transform-origin:3px center;transition:transform .06s}.flipper-line.right{transform:rotate(-24deg);transform-origin:18px center}.key-controls .flipper-line{position:absolute;right:12px;bottom:16px;width:18px;height:4px;opacity:.8}.pressed{background:#d9e1c9!important;box-shadow:inset 0 1px 5px #829d6930!important}.pressed .flipper-line.left{transform:rotate(-24deg)}.pressed .flipper-line.right{transform:rotate(24deg)}.quiet-note{font-family:var(--serif);font-size:11px;letter-spacing:1.6px;color:#8c967e;margin:22px 0 0}.stage{position:absolute;left:29%;right:-3.5%;top:-20px;bottom:-18px;z-index:1}#world{display:block;width:100%;height:100%;touch-action:none}.scene-label{position:absolute;right:9%;top:26px;display:flex;align-items:center;gap:11px;z-index:2;font-size:8px;letter-spacing:2px;color:#88927c;pointer-events:none}.short-line{height:1px;width:25px;background:#a8af9877}.scene-label i{font-style:normal;color:#b6bba6;margin:0 7px}.live-badge{padding:5px 9px;border:1px solid #a8b09560;border-radius:14px;letter-spacing:1.3px;font-size:7px;display:flex;gap:6px;align-items:center}.live-badge b{width:4px;height:4px;border-radius:50%;background:#879f6c}.ball-note{position:absolute;display:flex;align-items:center;gap:9px;z-index:2;white-space:nowrap;background:#f9f7eee0;border:1px solid #ffffffbb;border-radius:30px;font-size:10px;padding:10px 14px;letter-spacing:.7px;pointer-events:none;box-shadow:0 5px 20px #52644307;transition:opacity .3s;opacity:0}.note-dot{width:6px;height:6px;border-radius:50%;background:#8ea46c;box-shadow:0 0 0 4px #b5c49a30;animation:soft-pulse 2.3s ease-in-out infinite}@keyframes soft-pulse{50%{box-shadow:0 0 0 7px #b5c49a05}}.scene-bottom-note{position:absolute;bottom:27px;right:9%;font-family:var(--serif);font-size:10px;letter-spacing:1.9px;color:#959c84;display:flex;align-items:center;gap:10px;pointer-events:none}.tiny-orbit{width:8px;height:8px;border:1px solid #aab595;border-radius:50%}.loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:17px;z-index:4;background:var(--paper);font-size:11px;letter-spacing:1.5px;transition:opacity .5s}.loading>svg{width:38px;height:38px;stroke:#96a77b;fill:none;stroke-width:1;animation:soft-pulse 2s infinite}.footer{height:94px;flex-shrink:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;z-index:5;position:relative}.footer-left{display:flex;align-items:center;gap:15px;color:#929b83;letter-spacing:1.4px;font-size:8px;line-height:1.8}.footer-number{border:1px solid #aab09766;border-radius:5px;padding:7px 8px;font-size:7px;letter-spacing:1px}.tool-dock{border-radius:35px;background:#f9f8eef2;backdrop-filter:blur(15px);border:1px solid #ffffffdd;box-shadow:0 8px 25px #68745308;display:flex;align-items:center;height:56px;padding:4px 10px;gap:2px}.dock-button{width:43px;height:43px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;transition:background .2s;color:#58704d}.dock-button:hover,.dock-button[aria-pressed=true]{background:#e7eadb}.dock-button.with-label{width:78px;gap:8px;border-radius:22px;font-size:11px}.dock-button svg{width:18px;height:18px;stroke-width:1.4}.dock-button.with-label svg{width:20px;height:20px}.dock-divider{width:1px;height:18px;background:#b1b79e69;margin:0 5px}.cooldown-dot{position:absolute;bottom:6px;width:4px;height:4px;background:#a8b78d;border-radius:50%}.footer-right{justify-self:end;display:flex;flex-direction:column;gap:7px;text-align:right;font-size:9px;color:#8f987f;letter-spacing:1px}.footer-right>span:last-child{font-family:var(--serif);font-size:9px;display:flex;align-items:center;gap:6px}.footer-right svg{width:11px;height:11px;stroke:currentColor;stroke-width:1.2;fill:none}.mobile-controls{display:none}.toast{position:fixed;left:50%;bottom:115px;transform:translate(-50%,12px);background:#f9faf0ee;color:#526a45;border:1px solid #ffffff;border-radius:25px;padding:12px 23px;font-size:12px;letter-spacing:.7px;box-shadow:0 8px 36px #465b3a12;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:30;text-align:center;max-width:90vw;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}.pause-overlay{position:absolute;inset:35px 0 0;display:grid;place-items:center;z-index:5;background:#f2f1e735;backdrop-filter:blur(3px)}.pause-overlay>div{text-align:center;padding:32px 42px;background:#f7f6ebee;border:1px solid #ffffffdd;border-radius:22px;box-shadow:0 20px 100px #35452912}.pause-overlay svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.1}.pause-overlay h2{font-family:var(--serif);font-size:24px;font-weight:400;margin:17px 0 10px}.pause-overlay p{font-size:12px;color:#8a957b}.pause-overlay button{margin:12px auto 0;border-radius:26px;background:#557046;color:#f6f7ee;padding:12px 22px;display:flex;align-items:center;gap:25px;font-size:12px}.pause-overlay button svg{width:16px;height:16px}.fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:var(--paper);z-index:10;line-height:2}.fallback>svg{width:48px;height:48px;stroke:currentColor;fill:none}.fallback h2{font-family:var(--serif);font-weight:400}.fallback p{font-size:12px;color:var(--muted)}.fallback button{padding:10px 20px;border:1px solid var(--line);border-radius:24px}.sr-only{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap}dialog{border:1px solid #fff;background:#f8f7ef;color:var(--ink);padding:42px 44px 36px;border-radius:24px;box-shadow:0 22px 100px #273c3233;width:440px;max-width:calc(100vw - 36px);max-height:calc(100dvh - 40px);overflow:auto}dialog::backdrop{background:#34472a24;backdrop-filter:blur(7px)}.modal-close{position:absolute;right:17px;top:15px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center}.modal-close:hover{background:#e7eadb}.modal-close svg{width:17px;height:17px}.modal-eyebrow{font-size:9px;letter-spacing:2.2px;color:#9aa78a;margin:0 0 12px}.modal-art{width:65px;height:65px;border-radius:50%;display:grid;place-items:center;background:#e9edde;border:1px solid #d4ddc4;margin:0 0 22px}.modal-art svg{width:34px;height:34px;fill:none;stroke:#778f5d;stroke-width:1.2}#modal-title{font-family:var(--serif);font-size:28px;line-height:1.55;font-weight:400;letter-spacing:-.5px;margin:0 0 14px}.modal-copy{font-size:12px;color:#7c8b70;line-height:2.1;margin:0 0 21px}.steps{margin:21px 0 24px;padding:0;list-style:none;display:flex;flex-direction:column;gap:17px}.steps li{display:flex;gap:13px;align-items:flex-start}.step-num{font-family:Georgia,serif;font-style:italic;font-size:18px;color:#9aaa81;line-height:1.3;min-width:21px}.steps strong{font-size:12px;font-weight:500;letter-spacing:.3px}.steps p{font-size:11px;color:#89947d;line-height:1.8;margin:4px 0 0}.shortcut-table{padding:15px 17px;background:#ecefdf88;border-radius:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:10px;color:#78896a}.shortcut-table span{display:flex;align-items:center;gap:9px}.shortcut-table kbd{font:10px var(--sans);min-width:38px}.modal-primary{width:100%;border-radius:25px;background:#526e43;color:#f7f6eb;padding:13px 20px;font-size:12px;letter-spacing:.9px;margin-top:23px;display:flex;align-items:center;justify-content:space-between}.modal-primary svg{width:17px;height:17px}.modal-secondary{display:block;margin:14px auto 0;font-size:11px;color:#849177;text-decoration:underline;text-underline-offset:4px}.modal-quote{font-family:var(--serif);font-size:17px;color:#7e916b;padding:12px 0 9px;line-height:1.8}.modal-small{font-size:10px;color:#9aa18f;line-height:1.8}.win-stats{display:flex;gap:30px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;margin-top:21px}.win-stats strong{font-family:Georgia,serif;font-size:26px;font-weight:400;display:block;margin-bottom:6px}.win-stats small{font-size:9px;color:#8c977d}.no-script{position:fixed;inset:0;background:var(--paper);z-index:99;display:grid;place-items:center}.zen .intro,.zen .header .brand,.zen .header .nav-link,.zen .nav-divider,.zen .footer-left,.zen .footer-right{visibility:hidden}.zen .stage{left:-4%;right:-4%;top:-75px;bottom:-10px}.zen .scene-label{top:65px}.zen .header nav{margin-left:auto}.zen .mobile-controls{display:flex;position:fixed;bottom:110px;left:calc(50% - 240px);right:calc(50% - 240px);justify-content:space-between;z-index:8;pointer-events:none}.zen .mobile-controls button{pointer-events:auto}.zen .launch-button{visibility:visible;position:fixed;bottom:113px;left:50%;transform:translateX(-50%);width:155px;font-size:11px;height:43px}.zen .launch-button:disabled{visibility:hidden}.zen .tool-dock{grid-column:2}.zen .scene-bottom-note{display:none}.mobile-controls button{border:1px solid #a4b19066;display:flex;align-items:center;justify-content:center;gap:15px;background:#f8f7edeb;backdrop-filter:blur(10px);border-radius:28px;padding:14px 24px;min-width:140px;box-shadow:0 4px 10px #50653e05;font-size:12px}.mobile-controls button>span:not(.flipper-line){color:#a3ad93}.sunset{--paper:#eee7dc;--soft:#e8ded0}.sunset .tool-dock{background:#f5f0e7ef}
+@media(min-width:1500px){.intro{padding-top:5vh}.growth-card{max-width:320px}.launch-button,.key-controls{max-width:320px}.intro-copy{margin-bottom:32px}.growth-card{padding:22px 0;margin-bottom:28px}.key-controls{margin-top:30px}.launch-hint{margin-bottom:27px}}
+@media(max-height:840px) and (min-width:901px){.header{height:90px}.footer{height:76px}.intro{padding-top:24px}h1{font-size:clamp(34px,3.05vw,48px);margin-top:17px;margin-bottom:12px;line-height:1.42}.intro-copy{margin:18px 0;font-size:12px}.growth-card{padding:13px 0 12px;margin-bottom:18px}.growth-main{margin:7px 0 10px}.percent{font-size:49px}.growth-sprout{height:53px}.launch-hint{margin:10px 0 18px}.quiet-note{margin-top:16px;font-size:10px}.launch-button{height:47px}.stage{top:-12px;bottom:-10px}.scene-label{top:19px}.scene-bottom-note{bottom:19px}}
+@media(max-width:1150px) and (min-width:901px){.app{padding:0 34px}.intro{width:31%}.eyebrow{font-size:8px;letter-spacing:1.1px}.header nav{gap:27px}h1{font-size:36px}.key-controls .flipper-line{display:none}.stage{left:29%;right:-5%}.scene-label{right:4%;letter-spacing:1.2px}.growth-card,.launch-button,.key-controls{max-width:260px}.growth-main{gap:11px}.growth-sprout{width:39px}.footer-left{font-size:7px}.footer-right{font-size:8px}}
+@media(max-width:900px){body{overflow:hidden}.app{min-height:570px;padding:0 25px;height:100dvh}.header{height:79px}.brand-mark{width:32px;height:37px}.brand-mark svg{width:23px;height:23px}.brand-name{font-size:19px}.brand-en{font-size:6px;letter-spacing:1.45px;margin-top:4px}.brand{gap:9px}.header nav{gap:22px}.nav-link{font-size:11px;letter-spacing:.2px}.header nav .nav-link.active,.header nav .nav-divider,#about{display:none}.zen-button{border:0;padding:9px 0;gap:8px;font-size:11px}.zen-button svg{width:14px;height:14px}.garden{flex:1}.intro{padding-top:10px;width:100%;max-width:none;position:static}.eyebrow{font-size:7px;letter-spacing:1.2px;gap:7px}.eyebrow>span{width:13px}h1{font-size:32px;line-height:1.45;letter-spacing:-1px;margin:12px 0 0}.green-word>svg{bottom:-4px}.intro-copy,.quiet-note{display:none}.growth-card{position:absolute;top:6px;right:0;width:132px;border:1px solid #b1b99d4f;border-radius:14px;padding:11px 12px 10px;margin:0;background:#f7f6eb55}.growth-heading{font-size:9px;letter-spacing:0}.growth-heading svg{width:11px;height:11px}.growth-heading>span:first-child{gap:4px}.live-dot{display:none}.growth-main{margin:8px 0 9px;gap:6px}.percent{font-size:37px;min-width:62px;letter-spacing:-1.4px}.percent small{font-size:12px;margin-left:2px}.tile-count{font-size:7px;line-height:1.65}.tile-count strong{font-size:9px;white-space:nowrap;letter-spacing:0}.tile-count small,.growth-sprout{display:none}.growth-foot{font-size:7px;letter-spacing:0;margin-top:7px}.growth-foot>span:last-child{display:none}.progress-track{height:3px}.stage{left:-15px;right:-15px;top:140px;bottom:146px}.scene-label{top:4px;left:50%;right:auto;transform:translateX(-50%);font-size:6px;gap:8px;letter-spacing:1.4px;white-space:nowrap}.live-badge{font-size:6px;padding:4px 6px}.short-line{width:14px}.scene-label i{margin:0 2px}.scene-bottom-note{display:none}.ball-note{font-size:8px;padding:7px 10px;gap:7px}.launch-button{position:fixed;bottom:141px;left:50%;transform:translateX(-50%);width:230px;height:43px;font-size:11px;max-width:230px;z-index:7;letter-spacing:1px}.launch-button:active:not(:disabled){transform:translate(-50%,1px)}.launch-hint{position:fixed;bottom:119px;left:50%;transform:translateX(-50%);font-size:7px;margin:0;white-space:nowrap;z-index:7}.key-controls{display:none}.mobile-controls{display:flex;position:fixed;bottom:66px;left:25px;right:25px;justify-content:space-between;gap:15px;z-index:7}.mobile-controls button{width:47%;min-width:0;height:44px;padding:11px 15px;font-size:11px;gap:15px}.mobile-controls button .flipper-line{width:21px;height:4px}.footer{height:59px;display:flex;justify-content:center;z-index:9}.footer-left,.footer-right{display:none}.tool-dock{height:42px;padding:2px 8px;gap:0}.dock-button{width:38px;height:35px}.dock-button svg{width:16px;height:16px}.dock-button.with-label{width:62px;font-size:10px;gap:6px}.dock-button.with-label svg{width:18px;height:18px}.dock-divider{height:13px;margin:0 4px}.toast{bottom:197px;padding:10px 17px;font-size:10px;white-space:normal;width:max-content;max-width:85vw}.pause-overlay{inset:0}.pause-overlay>div{padding:22px 25px}.pause-overlay h2{font-size:21px}.pause-overlay p{font-size:10px}.zen .stage{left:-25px;right:-25px;top:-55px;bottom:125px}.zen .scene-label{top:18px}.zen .mobile-controls{left:25px;right:25px;bottom:66px}.zen .launch-button{bottom:134px;width:190px;height:42px}.zen .launch-hint{visibility:hidden}.zen .intro .growth-card{visibility:visible;top:-5px;right:0;z-index:5}.zen .header{z-index:10}.zen .header nav{align-self:flex-start;padding-top:20px}.zen .growth-card{top:30px!important;right:0;width:112px}.zen .growth-heading{font-size:8px}.zen .percent{font-size:32px;min-width:55px}.zen .tile-count{font-size:6px}.zen .tile-count strong{font-size:8px}}
+@media(max-width:420px){.app{padding:0 19px}.header{height:72px}.header nav{gap:17px}.brand-name{font-size:18px}h1{font-size:28px}.eyebrow{font-size:6px;letter-spacing:.9px}.growth-card{width:117px;padding:9px 10px}.growth-heading{font-size:8px}.growth-main{gap:3px}.percent{font-size:33px;min-width:55px}.percent small{font-size:11px}.tile-count{font-size:6px}.tile-count strong{font-size:8px}.growth-foot{font-size:6px}.stage{top:123px;bottom:143px}.mobile-controls{left:19px;right:19px}.dock-button{width:35px}.dock-button.with-label{width:58px}.tool-dock{padding:2px 7px}.launch-button{width:220px}dialog{padding:32px 25px 26px}#modal-title{font-size:25px}.modal-copy{font-size:11px}.steps{gap:14px}.modal-primary{margin-top:18px}.win-stats{gap:25px}}
+@media(max-height:720px) and (max-width:900px){.app{min-height:540px}.header{height:60px}.intro{padding-top:4px}h1{font-size:25px;line-height:1.35;margin-top:8px}.eyebrow{font-size:6px}.growth-card{top:0;padding:7px 10px;width:116px}.growth-main{margin:4px 0 6px}.percent{font-size:29px}.growth-heading{font-size:8px}.growth-foot{margin-top:5px}.stage{top:98px;bottom:132px}.launch-button{bottom:129px;height:39px}.launch-hint{bottom:113px}.mobile-controls{bottom:60px}.footer{height:53px}.scene-label{display:none}.toast{bottom:181px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg class="icon-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 4C9 3 3 8 5 15c2 7 13 6 15-11Z"/><path d="M4 21 16 9M9 16v-5m4 1h4"/></symbol>
+<symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-8M12 15C4 15 3 11 3 6c6 0 9 2 9 9ZM12 12c0-6 4-9 10-9 0 6-3 9-10 9Z"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+<symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m6 18 12-12M6 6h12v12"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
+<symbol id="i-sunset" viewBox="0 0 24 24"><path d="M3 17h18M5 21h14M6 17a6 6 0 0 1 12 0M12 3v3M3 8l2 2m14 0 2-2"/></symbol>
+<symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Zm4 3c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/></symbol>
+<symbol id="i-mute" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Zm5 4 5 6m0-6-5 6"/></symbol>
+<symbol id="i-view" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5m-18 5 9 5 9-5"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8V4Z"/></symbol>
+<symbol id="i-restart" viewBox="0 0 24 24"><path d="M4 8a9 9 0 1 1-1 7M4 3v6h6"/></symbol>
+<symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8h12a3 3 0 1 0-3-3M2 12h17a3 3 0 1 1-3 3M4 17h5"/></symbol>
+<symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+<symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M8 10a5 5 0 0 1 4-3"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 1 1 4 3c-1 .5-1 1-1 2m0 3h.01"/></symbol>
+</defs></svg>
+<div class="paper-grain" aria-hidden="true"></div>
+<div class="app">
+<header class="header">
+ <a class="brand" href="#garden" aria-label="叶间，回到小花园"><span class="brand-mark"><svg><use href="#i-sprout"/></svg></span><span class="brand-name">叶间<span class="brand-en">LEAF & LITTLE</span></span></a>
+ <nav aria-label="主导航"><a href="#garden" class="nav-link active">小花园</a><button class="nav-link" id="howto">怎么玩</button><button class="nav-link" id="about">关于叶间</button><span class="nav-divider"></span><button class="zen-button" id="zen" aria-pressed="false"><span>沉浸一下</span><svg><use href="#i-expand"/></svg></button></nav>
+</header>
+<main class="garden" id="garden">
+ <section class="intro" aria-labelledby="headline">
+  <div class="eyebrow"><span></span>A TINY GARDEN, JUST FOR YOU</div>
+  <h1 id="headline">弹一颗小球，<br>种一片<span class="green-word">绿意。<svg viewBox="0 0 145 12" aria-hidden="true"><path d="M3 8C35 2 78 1 139 5M17 11c31-5 64-4 111-3"/></svg></span></h1>
+  <p class="intro-copy">让弹珠走过空白的瓦片，<br>让每一次碰撞，都有新叶生长。</p>
+  <div class="growth-card" aria-label="绿化进度">
+   <div class="growth-heading"><span><svg><use href="#i-leaf"/></svg>花园生长日记</span><span class="live-dot"></span></div>
+   <div class="growth-main"><div class="percent"><span id="coverage">0</span><small>%</small></div><div class="tile-count"><span>绿意覆盖</span><strong><span id="tile-count">0</span><i> / </i><span id="tile-total">80</span></strong><small>块瓦片已苏醒</small></div>
+    <svg class="growth-sprout" viewBox="0 0 50 64" aria-hidden="true"><path d="M25 54V27M25 38C11 39 7 29 9 19c11 0 19 6 16 19ZM25 28C24 12 34 7 44 7c1 13-5 21-19 21Z"/><path d="M16 58h20"/></svg>
+   </div>
+   <div class="progress-track" role="progressbar" aria-label="绿意覆盖率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress-fill"></div></div>
+   <div class="growth-foot"><span>01 / 初生花园</span><span id="growth-phase">等一片新绿</span></div>
+  </div>
+  <button class="launch-button" id="launch"><span id="launch-text">让花园苏醒</span><svg><use href="#i-arrow-up"/></svg></button>
+  <p class="launch-hint" id="launch-hint"><kbd>SPACE</kbd> 或点击发射第一颗弹珠</p>
+  <div class="key-controls" aria-label="挡板控制">
+   <button class="flipper-button" data-flipper="left" aria-label="按住左挡板，快捷键 A 或左方向键"><kbd>A</kbd><span>左挡板<small>或 ←</small></span><span class="flipper-line left"></span></button>
+   <button class="flipper-button" data-flipper="right" aria-label="按住右挡板，快捷键 D 或右方向键"><kbd>D</kbd><span>右挡板<small>或 →</small></span><span class="flipper-line right"></span></button>
+  </div>
+  <p class="quiet-note">不计时，不赶路。只等一片绿意。</p>
+ </section>
+ <section class="stage" aria-label="3D 花园弹珠台">
+  <div class="scene-label"><span class="short-line"></span><span>SCENE 01 <i>/</i> LITTLE GREENHOUSE</span><span class="live-badge">LIVE 3D <b></b></span></div>
+  <canvas id="world" role="img" aria-label="实时三维弹珠台，使用左、右挡板控制弹珠，将八十块瓦片全部种满绿叶。"></canvas>
+  <div class="loading" id="loading"><svg><use href="#i-sprout"/></svg><span>正在搭建你的小花园…</span></div>
+  <div class="ball-note" id="ball-note"><span class="note-dot"></span><span id="ball-note-text">从一颗小球开始</span></div>
+  <div class="scene-bottom-note"><span class="tiny-orbit"></span><span id="scene-caption">木头的温度 · 春日的光</span></div>
+  <div class="pause-overlay" id="pause-overlay" hidden><div><svg><use href="#i-pause"/></svg><h2>歇一会儿，也很好。</h2><p>你的小花园会在这里等你。</p><button id="resume">继续生长 <svg><use href="#i-arrow"/></svg></button></div></div>
+  <div class="fallback" id="fallback" hidden><svg><use href="#i-sprout"/></svg><h2>小花园需要 3D 支持</h2><p>请使用支持 WebGL 2 的浏览器，并开启硬件加速。<br>推荐在电脑上的 Chrome、Edge 或 Safari 中打开。</p><button id="retry">重新尝试</button></div>
+ </section>
+ <div class="mobile-controls" aria-label="触屏挡板控制"><button data-flipper="left" aria-label="按住左挡板"><span class="flipper-line left"></span>左挡板<span>←</span></button><button data-flipper="right" aria-label="按住右挡板"><span>→</span>右挡板<span class="flipper-line right"></span></button></div>
+</main>
+<footer class="footer">
+ <div class="footer-left"><span class="footer-number">NO. 001</span><span>A LITTLE PLAY.<br>A LITTLE GREEN.</span></div>
+ <div class="tool-dock" role="toolbar" aria-label="花园设置">
+  <button id="daylight" class="dock-button with-label" title="切换日光 / 暖暮" aria-label="切换日光与暖暮"><svg><use href="#i-sun"/></svg><span>日光</span></button><span class="dock-divider"></span>
+  <button id="sound" class="dock-button" title="开启声音 · M" aria-label="开启声音" aria-pressed="false"><svg><use href="#i-mute"/></svg></button>
+  <button id="view" class="dock-button" title="切换俯视 / 立体视角 · V" aria-label="切换俯视视角" aria-pressed="false"><svg><use href="#i-view"/></svg></button>
+  <button id="nudge" class="dock-button" title="轻风助推 · N · 冷却 6 秒" aria-label="轻风助推，快捷键 N"><svg><use href="#i-wind"/></svg><span class="cooldown-dot" hidden></span></button><span class="dock-divider"></span>
+  <button id="pause" class="dock-button" title="暂停 · P" aria-label="暂停游戏" aria-pressed="false"><svg><use href="#i-pause"/></svg></button>
+  <button id="restart" class="dock-button" title="重新播种 · R" aria-label="重新开始"><svg><use href="#i-restart"/></svg></button>
+ </div>
+ <div class="footer-right"><span id="day-caption">午后 · 微风</span><span>让小小的绿意，慢慢发生 <svg><use href="#i-leaf"/></svg></span></div>
+</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="modal" aria-labelledby="modal-title"><button class="modal-close" id="modal-close" aria-label="关闭弹窗"><svg><use href="#i-close"/></svg></button><div id="modal-body"></div></dialog>
+<div id="announcer" class="sr-only" aria-live="polite"></div>
+<noscript><div class="no-script">请开启 JavaScript 来唤醒这座 3D 小花园。</div></noscript>
+<script>/* Leaf Studio — compact, dependency-free WebGL 2 renderer.
+ * Instanced meshes, orthographic cameras, procedural materials and PCF shadows.
+ * All matrices are column-major. No models, fonts or textures are downloaded.
+ */
+(() => {
+'use strict';
+const PI = Math.PI;
+const M = {
+ identity: () => new Float32Array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]),
+ mul(a,b,out=new Float32Array(16)) { for(let c=0;c<4;c++) for(let r=0;r<4;r++) out[c*4+r]=a[r]*b[c*4]+a[4+r]*b[c*4+1]+a[8+r]*b[c*4+2]+a[12+r]*b[c*4+3];return out; },
+ compose(p,r,s,out=new Float32Array(16)) {
+  const [x,y,z]=r, a=Math.cos(x),b=Math.sin(x),c=Math.cos(y),d=Math.sin(y),e=Math.cos(z),f=Math.sin(z);
+  out[0]=c*e*s[0];out[1]=(a*f+b*d*e)*s[0];out[2]=(b*f-a*d*e)*s[0];out[3]=0;
+  out[4]=-c*f*s[1];out[5]=(a*e-b*d*f)*s[1];out[6]=(b*e+a*d*f)*s[1];out[7]=0;
+  out[8]=d*s[2];out[9]=-b*c*s[2];out[10]=a*c*s[2];out[11]=0;
+  out[12]=p[0];out[13]=p[1];out[14]=p[2];out[15]=1;return out;
+ },
+ lookAt(eye,target,up=[0,1,0]) {
+  const norm=v=>{const d=Math.hypot(...v)||1;return v.map(x=>x/d)};
+  const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+  const z=norm(eye.map((x,i)=>x-target[i])),x=norm(cross(up,z)),y=cross(z,x);
+  return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-x.reduce((a,v,i)=>a+v*eye[i],0),-y.reduce((a,v,i)=>a+v*eye[i],0),-z.reduce((a,v,i)=>a+v*eye[i],0),1]);
+ },
+ ortho(l,r,b,t,n,f){return new Float32Array([2/(r-l),0,0,0,0,2/(t-b),0,0,0,0,-2/(f-n),0,-(r+l)/(r-l),-(t+b)/(t-b),-(f+n)/(f-n),1])},
+ transform(m,v){return [m[0]*v[0]+m[4]*v[1]+m[8]*v[2]+m[12],m[1]*v[0]+m[5]*v[1]+m[9]*v[2]+m[13],m[2]*v[0]+m[6]*v[1]+m[10]*v[2]+m[14]]}
+};
+let nextId=1;
+function color(hex){if(Array.isArray(hex))return hex;let n=parseInt(hex.replace('#',''),16);return[(n>>16&255)/255,(n>>8&255)/255,(n&255)/255]}
+class Node {
+ constructor(geometry=null,hex='#ffffff',kind=0) {this.geometry=geometry;this.color=color(hex);this.kind=kind;this.position=[0,0,0];this.rotation=[0,0,0];this.scale=[1,1,1];this.children=[];this.visible=true;this.castShadow=true;this.texture=null;this.matrix=M.identity();this.world=M.identity();}
+ add(...nodes){this.children.push(...nodes);return this;}
+ at(x,y,z){this.position=[x,y,z];return this;}
+ size(x,y=x,z=x){this.scale=[x,y,z];return this;}
+ rot(x,y=0,z=0){this.rotation=[x,y,z];return this;}
+}
+class Geometry {
+ constructor(data){this.id=nextId++;this.data=new Float32Array(data);this.count=data.length/8;}
+}
+const geomCache={};
+function tri(out,a,b,c,na,nb=na,nc=na,uvA=[0,0],uvB=[1,0],uvC=[1,1]){out.push(...a,...na,...uvA,...b,...nb,...uvB,...c,...nc,...uvC)}
+function normal(a,b,c){const u=b.map((x,i)=>x-a[i]),v=c.map((x,i)=>x-a[i]),n=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],l=Math.hypot(...n)||1;return n.map(x=>x/l)}
+const Geo={
+ box(bevel=0.06) {
+  const key='box'+bevel;if(geomCache[key])return geomCache[key];const out=[],b=Math.min(.48,bevel),segments=3;
+  // A subdivided cube projected onto a rounded box keeps dimensions exactly 1³.
+  for(let axis=0;axis<3;axis++)for(let sign of [-1,1]){
+   const u=(axis+1)%3,v=(axis+2)%3,vals=[-.5,-.5+b,.5-b,.5];
+   function vert(i,j){const p=[0,0,0];p[axis]=.5*sign;p[u]=vals[i];p[v]=vals[j];const q=p.map(x=>Math.max(-.5+b,Math.min(.5-b,x))),n=p.map((x,k)=>x-q[k]),l=Math.hypot(...n)||1;return [q.map((x,k)=>x+n[k]/l*b),n.map(x=>x/l)];}
+   for(let i=0;i<segments;i++)for(let j=0;j<segments;j++){
+    const [a,na]=vert(i,j),[bb,nb]=vert(i+1,j),[c,nc]=vert(i+1,j+1),[d,nd]=vert(i,j+1);
+    if(sign===1){tri(out,a,bb,c,na,nb,nc);tri(out,a,c,d,na,nc,nd)}else{tri(out,a,c,bb,na,nc,nb);tri(out,a,d,c,na,nd,nc)}
+   }
+  }return geomCache[key]=new Geometry(out);
+ },
+ sphere(segments=20,rings=12){const key='sphere'+segments+rings;if(geomCache[key])return geomCache[key];const o=[];
+  const v=(i,j)=>{const p=PI*j/rings,t=PI*2*i/segments;return[Math.sin(p)*Math.cos(t),Math.cos(p),Math.sin(p)*Math.sin(t)]};
+  for(let j=0;j<rings;j++)for(let i=0;i<segments;i++){const a=v(i,j),b=v(i+1,j),c=v(i+1,j+1),d=v(i,j+1);tri(o,a,b,c,a,b,c);tri(o,a,c,d,a,c,d)}return geomCache[key]=new Geometry(o);
+ },
+ cylinder(ratio=1,seg=28){const key='cylinder'+ratio+seg;if(geomCache[key])return geomCache[key];const o=[];for(let i=0;i<seg;i++){
+  const a=i*2*PI/seg,b=(i+1)*2*PI/seg,p=[Math.cos(a)*.5,-.5,Math.sin(a)*.5],q=[Math.cos(b)*.5,-.5,Math.sin(b)*.5],r=[Math.cos(b)*.5*ratio,.5,Math.sin(b)*.5*ratio],s=[Math.cos(a)*.5*ratio,.5,Math.sin(a)*.5*ratio],slope=(1-ratio)/2;
+  const l=Math.hypot(1,slope),na=[Math.cos(a)/l,slope/l,Math.sin(a)/l],nb=[Math.cos(b)/l,slope/l,Math.sin(b)/l];tri(o,p,s,r,na,na,nb);tri(o,p,r,q,na,nb,nb);tri(o,[0,.5,0],r,s,[0,1,0]);tri(o,[0,-.5,0],p,q,[0,-1,0]);}
+  return geomCache[key]=new Geometry(o);
+ },
+ torus(tube=.12,segments=36,sides=8){const key='torus'+tube+segments+sides;if(geomCache[key])return geomCache[key];const o=[];
+  const v=(i,j)=>{const a=i*2*PI/segments,b=j*2*PI/sides;return [[(1+Math.cos(b)*tube)*Math.cos(a),Math.sin(b)*tube,(1+Math.cos(b)*tube)*Math.sin(a)],[Math.cos(b)*Math.cos(a),Math.sin(b),Math.cos(b)*Math.sin(a)]]};
+  for(let i=0;i<segments;i++)for(let j=0;j<sides;j++){const [a,na]=v(i,j),[b,nb]=v(i+1,j),[c,nc]=v(i+1,j+1),[d,nd]=v(i,j+1);tri(o,a,d,c,na,nd,nc);tri(o,a,c,b,na,nc,nb)}return geomCache[key]=new Geometry(o);
+ },
+ leaf(){if(geomCache.leaf)return geomCache.leaf;const o=[],N=7;
+  const pt=(i,side)=>{let t=i/N;return[side*Math.sin(PI*t)*.29,t*.12+(1-side*side)*Math.sin(PI*t)*.105,-t]};
+  for(let i=0;i<N;i++)for(let s of [-1,1]){const a=pt(i,0),b=pt(i,s),c=pt(i+1,s),d=pt(i+1,0);const n=normal(a,s===1?d:b,s===1?c:d);if(s===1){tri(o,a,d,c,n);tri(o,a,c,b,n)}else{tri(o,a,b,c,n);tri(o,a,c,d,n)}}return geomCache.leaf=new Geometry(o);
+ },
+ plane(){if(geomCache.plane)return geomCache.plane;const o=[];tri(o,[-.5,0,-.5],[-.5,0,.5],[.5,0,.5],[0,1,0],undefined,undefined,[0,0],[0,1],[1,1]);tri(o,[-.5,0,-.5],[.5,0,.5],[.5,0,-.5],[0,1,0],undefined,undefined,[0,0],[1,1],[1,0]);return geomCache.plane=new Geometry(o);}
+};
+const vert=`#version 300 es
+precision highp float;
+layout(location=0) in vec3 aPos;
+layout(location=1) in vec3 aNormal;
+layout(location=2) in vec2 aUV;
+layout(location=3) in mat4 aModel;
+layout(location=7) in vec4 aColor;
+uniform mat4 uVP;uniform mat4 uLightVP;
+out vec3 vNormal;out vec3 vWorld;out vec3 vLocal;out vec4 vColor;out vec4 vLight;out vec2 vUV;
+void main(){vec4 w=aModel*vec4(aPos,1.);vWorld=w.xyz;vLocal=aPos;vUV=aUV;vColor=aColor;
+vec3 s=vec3(dot(aModel[0].xyz,aModel[0].xyz),dot(aModel[1].xyz,aModel[1].xyz),dot(aModel[2].xyz,aModel[2].xyz));vNormal=normalize(mat3(aModel)*(aNormal/max(s,vec3(.00001))));vLight=uLightVP*w;gl_Position=uVP*w;}`;
+const frag=`#version 300 es
+precision highp float;
+in vec3 vNormal;in vec3 vWorld;in vec3 vLocal;in vec4 vColor;in vec4 vLight;in vec2 vUV;
+uniform sampler2D uShadow;uniform sampler2D uDecal;uniform bool uTextured;
+uniform vec3 uLightDir;uniform vec3 uEye;uniform vec3 uSun;uniform vec3 uBackground;uniform float uExposure;
+out vec4 outColor;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+float shadow(vec3 n){vec3 p=vLight.xyz/vLight.w*.5+.5;if(p.x<0.||p.x>1.||p.y<0.||p.y>1.||p.z>1.)return 0.;float s=0.;float bias=max(.0012*(1.-dot(n,uLightDir)),.00055);
+for(int x=-2;x<=2;x++)for(int y=-2;y<=2;y++){float d=texture(uShadow,p.xy+vec2(float(x),float(y))*.0023).r;s+=(p.z-bias>d?1.:0.);}return s/25.;}
+void main(){vec3 n=normalize(vNormal);if(!gl_FrontFacing)n=-n;vec3 albedo=vColor.rgb;float kind=vColor.a;float alpha=1.;
+if(uTextured){vec4 t=texture(uDecal,vUV);if(t.a<.1)discard;albedo*=t.rgb;alpha=t.a;}
+if(kind>.5&&kind<1.5){float grain=sin(vLocal.x*185.+sin(vLocal.z*5.)*4.+sin(vLocal.x*32.)*2.);float fine=sin(vLocal.x*475.+sin(vLocal.z*9.)*5.);albedo*=.963+.027*grain+.012*fine;}
+vec3 base=pow(albedo,vec3(2.2));float diff=max(dot(n,uLightDir),0.);float sh=shadow(n);
+vec3 lighting=vec3(.42+.12*max(n.y,0.)) + vec3(.075,.085,.075)*max(dot(n,normalize(vec3(1.,.3,1.))),0.) + uSun*diff*(1.-sh*.85)*.64;
+vec3 result=base*lighting;vec3 h=normalize(uLightDir+normalize(uEye-vWorld));
+if(kind>1.5&&kind<2.5){float spec=pow(max(dot(n,h),0.),72.);result+=uSun*spec*.9*(1.-sh*.7);result+=vec3(.085)*pow(1.-max(dot(n,normalize(uEye-vWorld)),0.),3.);}
+if(kind>2.5&&kind<3.5)result=base*1.32;
+if(kind>3.5&&kind<4.5)result+=base*pow(max(dot(-n,uLightDir),0.),2.)*.18;
+result*=uExposure;result=pow(max(result,vec3(0.)),vec3(1./2.2));result=mix(result,uBackground,smoothstep(24.,65.,length(vWorld.xz)));
+if(kind>5.5)result=albedo*mix(vec3(1.),vec3(.79,.81,.76),sh*.72);
+outColor=vec4(clamp(result,0.,1.),alpha);}`;
+const shadowVert=`#version 300 es
+precision highp float;layout(location=0)in vec3 aPos;layout(location=3)in mat4 aModel;uniform mat4 uVP;void main(){gl_Position=uVP*aModel*vec4(aPos,1.);}`;
+const shadowFrag=`#version 300 es
+precision highp float;void main(){}`;
+class Renderer {
+ constructor(canvas){const gl=canvas.getContext('webgl2',{antialias:true,alpha:false,powerPreference:'high-performance',preserveDrawingBuffer:false});if(!gl)throw new Error('WebGL 2 不可用');this.gl=gl;this.canvas=canvas;this.batches=new Map();this.light=[-12,24,9];this.eye=[11,20,26];this.target=[0,0,0];this.background=color('#f3f0e5');this.sun=[1.04,1.0,.86];this.exposure=1.0;this.height=23;this.lightVP=M.mul(M.ortho(-18,18,-20,20,.1,70),M.lookAt(this.light,[0,0,0]));this.program=this.programFor(vert,frag);this.shadowProgram=this.programFor(shadowVert,shadowFrag);this.shadowSize=1536;
+ this.shadowTexture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,this.shadowTexture);gl.texImage2D(gl.TEXTURE_2D,0,gl.DEPTH_COMPONENT24,this.shadowSize,this.shadowSize,0,gl.DEPTH_COMPONENT,gl.UNSIGNED_INT,null);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);this.fbo=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,this.fbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.DEPTH_ATTACHMENT,gl.TEXTURE_2D,this.shadowTexture,0);gl.drawBuffers([gl.NONE]);gl.readBuffer(gl.NONE);if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw new Error('无法创建 3D 阴影缓冲');gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+ gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);
+ }
+ programFor(v,f){const gl=this.gl,compile=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s};const p=gl.createProgram();gl.attachShader(p,compile(gl.VERTEX_SHADER,v));gl.attachShader(p,compile(gl.FRAGMENT_SHADER,f));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));return p;}
+ texture(canvas){const gl=this.gl,texture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,canvas);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.generateMipmap(gl.TEXTURE_2D);return {id:nextId++,handle:texture};}
+ resize(w,h,dpr=1.5){this.w=w;this.h=h;this.canvas.width=Math.max(1,Math.round(w*dpr));this.canvas.height=Math.max(1,Math.round(h*dpr));this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';}
+ makeBatch(mesh){const gl=this.gl,vao=gl.createVertexArray();gl.bindVertexArray(vao);const vbo=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vbo);gl.bufferData(gl.ARRAY_BUFFER,mesh.geometry.data,gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,3,gl.FLOAT,false,32,0);gl.enableVertexAttribArray(1);gl.vertexAttribPointer(1,3,gl.FLOAT,false,32,12);gl.enableVertexAttribArray(2);gl.vertexAttribPointer(2,2,gl.FLOAT,false,32,24);const ibo=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,ibo);for(let i=0;i<4;i++){gl.enableVertexAttribArray(3+i);gl.vertexAttribPointer(3+i,4,gl.FLOAT,false,80,i*16);gl.vertexAttribDivisor(3+i,1)}gl.enableVertexAttribArray(7);gl.vertexAttribPointer(7,4,gl.FLOAT,false,80,64);gl.vertexAttribDivisor(7,1);gl.bindVertexArray(null);return{vao,vbo,ibo,geometry:mesh.geometry,texture:mesh.texture,castShadow:mesh.castShadow,items:[],data:new Float32Array(80)};}
+ updateCamera(){const aspect=this.w/this.h;this.vp=M.mul(M.ortho(-this.height*aspect/2,this.height*aspect/2,-this.height/2,this.height/2,.1,120),M.lookAt(this.eye,this.target));}
+ project(p){const v=M.transform(this.vp,p);return[(v[0]+1)*.5*this.w,(1-v[1])*.5*this.h];}
+ render(root){const gl=this.gl;this.updateCamera();for(const b of this.batches.values())b.items.length=0;
+ const walk=(node,parent)=>{if(!node.visible)return;M.compose(node.position,node.rotation,node.scale,node.matrix);M.mul(parent,node.matrix,node.world);if(node.geometry){const key=node.geometry.id+'-'+(node.texture?.id||0)+'-'+node.castShadow;let b=this.batches.get(key);if(!b){b=this.makeBatch(node);this.batches.set(key,b)}b.items.push(node);}for(const child of node.children)walk(child,node.world);};walk(root,M.identity());
+ for(const b of this.batches.values()){let n=b.items.length;if(!n)continue;if(b.data.length<n*20)b.data=new Float32Array(Math.max(n*20,b.data.length*2));for(let i=0;i<n;i++){const m=b.items[i],offset=i*20;b.data.set(m.world,offset);b.data.set(m.color,offset+16);b.data[offset+19]=m.kind;}gl.bindBuffer(gl.ARRAY_BUFFER,b.ibo);gl.bufferData(gl.ARRAY_BUFFER,b.data.subarray(0,n*20),gl.DYNAMIC_DRAW);}
+ gl.bindFramebuffer(gl.FRAMEBUFFER,this.fbo);gl.viewport(0,0,this.shadowSize,this.shadowSize);gl.clear(gl.DEPTH_BUFFER_BIT);gl.useProgram(this.shadowProgram);gl.uniformMatrix4fv(gl.getUniformLocation(this.shadowProgram,'uVP'),false,this.lightVP);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1.2,2.0);for(const b of this.batches.values()){if(!b.items.length||!b.castShadow||b.texture)continue;gl.bindVertexArray(b.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,b.geometry.count,b.items.length)}gl.disable(gl.POLYGON_OFFSET_FILL);
+ gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,this.canvas.width,this.canvas.height);gl.clearColor(...this.background,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);const p=this.program;gl.useProgram(p);const uni=n=>gl.getUniformLocation(p,n);gl.uniformMatrix4fv(uni('uVP'),false,this.vp);gl.uniformMatrix4fv(uni('uLightVP'),false,this.lightVP);const ll=Math.hypot(...this.light);gl.uniform3fv(uni('uLightDir'),this.light.map(v=>v/ll));gl.uniform3fv(uni('uEye'),this.eye);gl.uniform3fv(uni('uSun'),this.sun);gl.uniform3fv(uni('uBackground'),this.background);gl.uniform1f(uni('uExposure'),this.exposure);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.shadowTexture);gl.uniform1i(uni('uShadow'),0);gl.uniform1i(uni('uDecal'),1);
+ for(const b of this.batches.values()){if(!b.items.length)continue;gl.uniform1i(uni('uTextured'),!!b.texture);if(b.texture){gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,b.texture.handle)}gl.bindVertexArray(b.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,b.geometry.count,b.items.length);}gl.bindVertexArray(null);
+ }
+}
+window.Garden3D={M,Geo,Node,Renderer,color};
+})();
+</script>
+<script>/* Deterministic 2-D pinball physics mapped to a true 3-D table.
+ * Fixed 1/180 s steps avoid tunnelling. No tile is activated by a timer or hint.
+ * Tile coverage comes exclusively from the swept ball/rectangle intersection.
+ */
+(function(root){
+'use strict';
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const CFG=Object.freeze({cols:8,rows:10,pitchX:1.075,pitchZ:1.055,tileW:1.01,tileH:.99,firstZ:-6.40,left:-4.65,right:4.65,top:-7.30,drain:7.70,ballR:.235,gravity:3.35,maxSpeed:17,fixedStep:1/180});
+const BUMPERS=Object.freeze([{x:-2.13,z:-1.70,r:.53},{x:2.13,z:-1.70,r:.53},{x:0,z:-4.35,r:.53}]);
+function closestPoint(x,z,ax,az,bx,bz){const dx=bx-ax,dz=bz-az,t=clamp(((x-ax)*dx+(z-az)*dz)/(dx*dx+dz*dz||1),0,1);return{x:ax+dx*t,z:az+dz*t,t};}
+class Pinball {
+ constructor(callbacks={}){this.callbacks=callbacks;this.input={left:false,right:false};this.tiles=Array.from({length:CFG.cols*CFG.rows},(_,i)=>({index:i,x:(i%CFG.cols-(CFG.cols-1)/2)*CFG.pitchX,z:CFG.firstZ+Math.floor(i/CFG.cols)*CFG.pitchZ,active:false}));this.flippers=[{side:-1,x:-2.83,z:5.32,angle:.27,target:.27,velocity:0,pressed:false},{side:1,x:2.83,z:5.32,angle:.27,target:.27,velocity:0,pressed:false}];this.reset();}
+ emit(type,data){this.callbacks[type]?.(data,this);}
+ reset(){this.tiles.forEach(t=>t.active=false);this.count=0;this.time=0;this.shots=0;this.flips=0;this.bounces=0;this.launchTime=0;this.paused=false;this.state='ready';this.accumulator=0;this.nudgeCooldown=0;this.ball={x:5.12,z:6.25,vx:0,vz:0,r:CFG.ballR,trail:[]};this.flippers.forEach(f=>{f.angle=.27;f.velocity=0;f.target=.27;f.pressed=false});this.input.left=this.input.right=false;this.bumperCooldowns=[0,0,0];this.emit('reset');}
+ get progress(){return this.count/this.tiles.length;}
+ setInput(side,pressed){if(side!=='left'&&side!=='right')return;this.input[side]=!!pressed;}
+ clearInput(){this.input.left=this.input.right=false;}
+ launch(){if(this.paused||this.state!=='ready')return false;this.state='launching';this.launchTime=0;this.shots++;this.ball.x=5.12;this.ball.z=6.25;this.ball.vx=this.ball.vz=0;this.ball.trail=[];this.emit('launch');return true;}
+ nudge(){if(this.state!=='playing'||this.paused||this.nudgeCooldown>0)return false;this.nudgeCooldown=6;const b=this.ball;b.vz-=2.8;b.vx+=(b.x>0?-1:1)*1.05;this.emit('nudge');return true;}
+ togglePause(){if(this.state==='won')return;this.paused=!this.paused;this.clearInput();this.accumulator=0;this.emit('pause',this.paused);}
+ update(dt){if(this.paused)return;this.accumulator+=Math.min(.09,Math.max(0,dt));while(this.accumulator>=CFG.fixedStep){this.step(CFG.fixedStep);this.accumulator-=CFG.fixedStep;}}
+ flipperEndpoints(f){const l=2.43;return{ax:f.x,az:f.z,bx:f.x-f.side*Math.cos(f.angle)*l,bz:f.z+Math.sin(f.angle)*l};}
+ step(dt){
+  this.nudgeCooldown=Math.max(0,this.nudgeCooldown-dt);
+  for(let i=0;i<3;i++)this.bumperCooldowns[i]=Math.max(0,this.bumperCooldowns[i]-dt);
+  for(let i=0;i<2;i++){const f=this.flippers[i],pressed=this.input[i===0?'left':'right'];if(pressed&&!f.pressed){this.flips++;this.emit('flip',i)}f.pressed=pressed;f.target=pressed?-.40:.27;const prev=f.angle;f.angle+=clamp(f.target-f.angle,-10*dt,10*dt);f.velocity=(f.angle-prev)/dt;}
+  if(this.state==='ready'||this.state==='won')return;
+  this.time+=dt;
+  if(this.state==='launching'){
+   this.launchTime+=dt;const t=clamp(this.launchTime/.90,0,1);this.ball.z=6.25-13.14*(1-Math.pow(1-t,1.45));this.ball.x=t<.75?5.12:5.12-1.28*Math.pow((t-.75)/.25,1.5);
+   if(t>=1){this.state='playing';const spread=Math.sin(this.shots*2.39996);this.ball.vx=-5.0+spread*1.7;this.ball.vz=3.9+Math.cos(this.shots*1.7)*.6;this.emit('play');}return;
+  }
+  const b=this.ball,px=b.x,pz=b.z;b.vz+=CFG.gravity*dt;const drag=Math.exp(-.012*dt);b.vx*=drag;b.vz*=drag;b.x+=b.vx*dt;b.z+=b.vz*dt;
+  if(b.x-b.r<CFG.left){b.x=CFG.left+b.r;this.reflect(1,0,.91);}
+  if(b.x+b.r>CFG.right){b.x=CFG.right-b.r;this.reflect(-1,0,.91);}
+  if(b.z-b.r<CFG.top){b.z=CFG.top+b.r;this.reflect(0,1,.92);}
+  // Raised wooden return guides leave a real drain between the two flippers.
+  this.segment(-4.65,3.13,-2.83,5.32,.135,.87);
+  this.segment(4.65,3.13,2.83,5.32,.135,.87);
+  for(let i=0;i<BUMPERS.length;i++){
+   const p=BUMPERS[i],dx=b.x-p.x,dz=b.z-p.z,d=Math.hypot(dx,dz),min=p.r+b.r;
+   if(d<min){const nx=d>.0001?dx/d:1,nz=d>.0001?dz/d:0;b.x=p.x+nx*(min+.005);b.z=p.z+nz*(min+.005);
+    const impact=b.vx*nx+b.vz*nz;if(impact<0&&this.bumperCooldowns[i]===0){const speed=clamp(Math.hypot(b.vx,b.vz)*.88+2.1,7.3,12.8);b.vx=nx*speed;b.vz=nz*speed;this.bumperCooldowns[i]=.13;this.bounces++;this.emit('bumper',i);}
+   }
+  }
+  for(const f of this.flippers){const p=this.flipperEndpoints(f),q=closestPoint(b.x,b.z,p.ax,p.az,p.bx,p.bz),dx=b.x-q.x,dz=b.z-q.z,d=Math.hypot(dx,dz),min=b.r+.185;
+   if(d<min){let nx=d>.0001?dx/d:0,nz=d>.0001?dz/d:-1;b.x=q.x+nx*(min+.004);b.z=q.z+nz*(min+.004);
+    const incoming=b.vx*nx+b.vz*nz;
+    if(nz<.20&&(incoming<0||f.velocity<-1)){
+     const t=q.t,speed=f.pressed?13.8:6.0;
+     // The contact point and paddle phase determine the outgoing shot.
+     // Late tip contacts cross the table; heel contacts favour the outer lane.
+     const aim=clamp((t-.36)*1.27,-.52,.69)*(-f.side);
+     b.vx=aim*speed+b.vx*.12;b.vz=-Math.sqrt(Math.max(16,speed*speed-b.vx*b.vx));
+     this.bounces++;this.emit('paddle',{side:f.side,t});
+    }else if(incoming<0)this.reflect(nx,nz,.80);
+   }
+  }
+  // Sample the actual swept trajectory, not only endpoints, at <= ½ radius.
+  this.sweepTiles(px,pz,b.x,b.z);
+  const speed=Math.hypot(b.vx,b.vz);if(speed>CFG.maxSpeed){b.vx*=CFG.maxSpeed/speed;b.vz*=CFG.maxSpeed/speed;}
+  // Very slow horizontal rolls receive a tiny gravitational drift, never teleport.
+  if(Math.abs(b.vx)<.035&&b.z<4.2)b.vx+=(b.x>=0?-.025:.025);
+  if(b.z>CFG.drain){this.state='ready';b.x=5.12;b.z=6.25;b.vx=b.vz=0;b.trail=[];this.clearInput();this.emit('drain');}
+ }
+ reflect(nx,nz,restitution){const b=this.ball,v=b.vx*nx+b.vz*nz;if(v>=0)return;b.vx-=(1+restitution)*v*nx;b.vz-=(1+restitution)*v*nz;if(Math.abs(v)>2)this.emit('wall',Math.abs(v));}
+ segment(ax,az,bx,bz,r,restitution){const b=this.ball,q=closestPoint(b.x,b.z,ax,az,bx,bz),dx=b.x-q.x,dz=b.z-q.z,d=Math.hypot(dx,dz),min=b.r+r;if(d>=min)return;const nx=dx/(d||1),nz=dz/(d||1);b.x=q.x+nx*(min+.001);b.z=q.z+nz*(min+.001);this.reflect(nx,nz,restitution);}
+ sweepTiles(ax,az,bx,bz){const d=Math.hypot(bx-ax,bz-az),steps=Math.max(1,Math.ceil(d/(CFG.ballR*.5)));for(let i=0;i<=steps;i++){const t=i/steps;this.touchTiles(ax+(bx-ax)*t,az+(bz-az)*t);}}
+ touchTiles(x,z){if(this.state!=='playing')return;for(const tile of this.tiles){if(tile.active)continue;const dx=Math.max(Math.abs(x-tile.x)-CFG.tileW/2,0),dz=Math.max(Math.abs(z-tile.z)-CFG.tileH/2,0);if(dx*dx+dz*dz<=CFG.ballR*CFG.ballR){tile.active=true;this.count++;this.emit('grow',tile);}}
+  if(this.count===this.tiles.length){this.state='won';this.clearInput();this.emit('win');}
+ }
+ snapshot(){return{state:this.state,paused:this.paused,count:this.count,total:this.tiles.length,progress:this.progress,shots:this.shots,flips:this.flips,time:this.time,ball:{x:this.ball.x,z:this.ball.z,vx:this.ball.vx,vz:this.ball.vz},angles:this.flippers.map(f=>f.angle),nudgeCooldown:this.nudgeCooldown};}
+}
+root.GardenPhysics={Pinball,CFG,BUMPERS,closestPoint};
+})(typeof window!=='undefined'?window:globalThis);
+</script>
+<script>/* Procedural miniature: every board, leaf, flower and lamp is real geometry. */
+(() => {
+'use strict';
+const {Node,Geo,color}=Garden3D,{CFG,BUMPERS}=GardenPhysics,PI=Math.PI;
+const C={wood:'#d9b577',edge:'#ba8e4d',lightWood:'#e6ce98',cream:'#eeead7',sage:'#8c9e69',green:'#6f874c',dark:'#4f663e',brass:'#c4a567',soil:'#a29370',ivory:'#f6f0d8'};
+let rngState=1947;function rand(){rngState=(rngState*1664525+1013904223)>>>0;return rngState/4294967296;}
+const pick=arr=>arr[Math.floor(rand()*arr.length)];
+function createGarden(renderer,physics){
+ const root=new Node(),table=new Node();root.add(table);const tileModels=[],flipperModels=[],bumperModels=[],vines=[],lights=[],particles=[],trail=[],petals=[];
+ const mesh=(geo,col,kind,parent,x,y,z,sx=1,sy=sx,sz=sx)=>{const m=new Node(geo,col,kind).at(x,y,z).size(sx,sy,sz);parent.add(m);return m};
+ const box=(p,x,y,z,w,h,d,col=C.wood,kind=1,b=.055)=>mesh(Geo.box(b),col,kind,p,x,y,z,w,h,d);
+ const cyl=(p,x,y,z,w,h,col,ratio=1)=>mesh(Geo.cylinder(ratio),col,0,p,x,y,z,w,h,w);
+ const sphere=(p,x,y,z,sx,sy,sz,col,kind=0)=>mesh(Geo.sphere(),col,kind,p,x,y,z,sx,sy,sz);
+ function rod(p,a,b,r,col,kind=0){const dx=b[0]-a[0],dy=b[1]-a[1],dz=b[2]-a[2],len=Math.hypot(dx,dy,dz);const m=mesh(Geo.cylinder(),col,kind,p,(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2,r*2,len,r*2);m.rotation=[Math.atan2(dz,dy),0,-Math.atan2(dx,Math.hypot(dy,dz))];return m;}
+ function leaf(p,x,y,z,length,angle,tilt,col=C.green,width=1){const m=mesh(Geo.leaf(),col,4,p,x,y,z,length*width,length,length).rot(tilt,angle,0);return m;}
+ function torus(p,x,y,z,r,tube,col){return mesh(Geo.torus(tube),col,0,p,x,y,z,r,r,r);}
+ function label(text,x,y,z,w,h,{font='500 60px Georgia',colorText='#586b43',background=null,vertical=false,parent=table,subtitle=null}={}){
+  const cn=document.createElement('canvas');cn.width=1024;cn.height=Math.round(1024*h/w);const ctx=cn.getContext('2d');ctx.clearRect(0,0,cn.width,cn.height);if(background){ctx.fillStyle=background;ctx.fillRect(0,0,cn.width,cn.height);}ctx.fillStyle=colorText;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=font;ctx.fillText(text,512,cn.height*(subtitle?.40:.53),920);if(subtitle){ctx.font='20px sans-serif';ctx.fillStyle='#92a07c';ctx.fillText(subtitle,512,cn.height*.76,900)}
+  const m=mesh(Geo.plane(),'#ffffff',0,parent,x,y,z,w,1,h);m.texture=renderer.texture(cn);m.castShadow=false;if(vertical)m.rot(PI/2,0,0);return m;
+ }
+ const floor=mesh(Geo.plane(),'#f3f0e5',0,root,0,-1.72,0,100,1,100);floor.castShadow=false;floor.kind=6;
+ // A warm raised plinth, individual wooden slats, and small tapered feet.
+ for(const x of [-4.38,4.82])for(const z of [-6.1,6.0]){
+  cyl(table,x,-.88,z,.47,1.42,C.wood,.80);cyl(table,x,-1.55,z,.52,.15,C.edge,.94);
+ }
+ box(table,.35,.15,-.12,11.74,.69,17.38,C.edge,1,.055);
+ box(table,.35,.48,-.12,11.86,.19,17.50,C.wood,1,.06);
+ for(let i=0;i<12;i++)box(table,-5.16+i*.996,.62,-.12,.977,.16,17.28,pick(['#dcbc81','#e1c48c','#dabb83','#e3c58d']),1,.04);
+ // Inner field; the lower section is the control / return zone, not a target tile.
+ box(table,0,.68,-.02,9.35,.17,14.75,'#c9c9a9',0,.025);
+ box(table,0,.782,4.94,9.16,.045,4.90,'#e5e1c5',0,.045);
+ box(table,-4.93,.96,-.13,.57,.60,15.75,C.lightWood,1,.07);
+ box(table,5.77,.96,-.13,.45,.60,15.75,C.lightWood,1,.07);
+ box(table,.42,.96,-7.59,11.03,.6,.58,C.lightWood,1,.07);
+ box(table,-2.83,.96,7.57,4.83,.6,.61,C.lightWood,1,.07);
+ box(table,3.30,.96,7.57,5.43,.6,.61,C.lightWood,1,.07);
+ // Inlaid dark edging and brass corner pins.
+ box(table,-4.636,1.013,-.20,.055,.12,14.85,C.sage,0);
+ box(table,.02,1.013,-7.285,9.34,.12,.045,C.sage,0);
+ for(const x of [-4.94,5.76])for(const z of [-7.62,7.57]){cyl(table,x,1.279,z,.13,.022,C.brass);box(table,x,1.293,z,.075,.004,.014,'#a58952',0);}
+ // Narrow spring lane. The ball follows it before entering the upper playfield.
+ box(table,5.17,.79,-.22,.77,.05,14.95,'#d3d5b4',0);
+ box(table,4.76,.98,.44,.20,.32,13.45,C.wood,1);
+ box(table,5.54,.99,-.16,.06,.20,14.83,C.brass,2);
+ const spring=new Node().at(5.13,.99,6.98);table.add(spring);
+ for(let i=0;i<8;i++)torus(spring,0,0,-.45+i*.115,.19,.12,C.brass).rot(PI/2,0,0);
+ rod(table,[5.13,.99,7.05],[5.13,.99,8.17],.068,C.brass,2);
+ sphere(table,5.13,.99,8.19,.27,.25,.17,C.wood);
+ cyl(table,5.13,.83,6.25,.66,.025,'#c1cba3');
+ const launchRing=torus(table,5.13,.854,6.25,.39,.032,'#f5f0cb');launchRing.kind=3;launchRing.castShadow=false;
+ // A small dark cup makes the drain visually explicit.
+ box(table,.07,.64,7.74,1.27,.28,1.40,C.sage,0,.09);
+ box(table,.07,.79,7.72,.83,.06,1.22,'#6d7954',0,.10);
+ label('KEEP GROWING',0,.818,6.83,1.9,.30,{font:'500 38px sans-serif',colorText:'#9a9f7c'});
+ label('LEAF  /  01',-.1,.26,8.59,3,.39,{font:'500 43px sans-serif',colorText:'#816940',vertical:true});
+ label('let it grow.',0,.817,4.14,2.50,.71,{font:'italic 100px Georgia',colorText:'#929c70'});
+ // Eight by ten individually activatable tiles. Only physics can activate these.
+ physics.tiles.forEach(t=>{
+  const base=box(table,t.x,.795,t.z,CFG.tileW,.12,CFG.tileH,pick(['#e6e1c7','#e2dec3','#eae5cd','#e5e1c8','#e8e2c9']),0,.06);
+  const bare=[...base.color];const plant=new Node().at(t.x,.87,t.z);plant.visible=false;table.add(plant);
+  // A subtle seed mark is visible on bare clay.
+  const seed=sphere(table,t.x,.865,t.z,.038,.010,.055,'#babd9b');seed.castShadow=false;seed.rotation[1]=.45;
+  const stems=[];
+  for(let k=0;k<5;k++){const angle=k*PI*2/5+rand()*.3+((t.index%3)*.5),l=.49+rand()*.10;const lmesh=leaf(plant,0,.025,0,l,angle,.22+rand()*.39,pick(['#88a459','#9bb66c','#79994d','#aac077','#6e8e45']),1.08);stems.push({mesh:lmesh,tilt:lmesh.rotation[0],angle});}
+  cyl(plant,0,.15,0,.042,.30,'#85a354',.67);
+  leaf(plant,0,.22,0,.37,-.4+rand()*5,.9,'#aec47a',1.02);
+  const bud=sphere(plant,0,.34,0,.036,.058,.036,'#bbc986');
+  tileModels.push({base,bare,plant,seed,stems,age:-1,phase:rand()*PI*2,bud});
+ });
+ // Three ceramic daisies act as physical bumpers.
+ BUMPERS.forEach((b,i)=>{
+  const g=new Node().at(b.x,.88,b.z);table.add(g);cyl(g,0,.015,0,1.23,.06,'#a3b380');torus(g,0,.075,0,.58,.027,'#e9e8c9');
+  const flower=new Node();g.add(flower);cyl(flower,0,.13,0,1.03,.22,'#9cb275',1.02);cyl(flower,0,.265,0,.97,.085,C.cream,.98);torus(flower,0,.30,0,.42,.045,C.ivory);
+  for(let k=0;k<7;k++){const a=k*2*PI/7;sphere(flower,Math.cos(a)*.215,.342,Math.sin(a)*.215,.128,.055,.21,'#faf3d8').rotation[1]=-a+PI/2;}
+  sphere(flower,0,.37,0,.155,.09,.155,'#d8b75b');bumperModels.push({root:g,flower,kick:0});
+ });
+ // Slanted wooden guides funnel the ball towards two genuinely moving paddles.
+ for(const side of [-1,1]){
+  rod(table,[side*4.62,.987,3.14],[side*2.83,.987,5.32],.136,C.wood,1);
+  rod(table,[side*4.62,1.086,3.14],[side*2.83,1.086,5.32],.038,C.sage);
+  const g=new Node().at(side*2.83,1.0,5.32);table.add(g);
+  box(g,1.18,0,0,2.20,.26,.40,C.wood,1,.16);
+  cyl(g,2.27,0,0,.39,.26,C.wood);cyl(g,.11,0,0,.49,.26,C.wood);
+  box(g,1.26,.15,0,1.94,.05,.292,side<0?'#89a36a':'#a1b880',0,.15);
+  cyl(g,2.19,.15,0,.285,.05,side<0?'#89a36a':'#a1b880');
+  cyl(g,0,.10,0,.43,.18,C.brass);cyl(g,0,.205,0,.215,.026,'#ead29c');
+  const mark=leaf(g,.78,.18,0,.23,PI/2,0,'#d8e0b8');mark.castShadow=false;
+  flipperModels.push(g);
+ }
+ // A miniature greenhouse frame behind the table, not over the playable tiles.
+ for(const x of [-4.98,5.66]){
+  box(table,x,2.21,-8.04,.27,3.30,.28,C.wood,1,.045);
+  box(table,x,.78,-8.04,.48,.24,.48,C.edge,1,.04);
+ }
+ const roofPeak=[.34,5.23,-8.10],roofLeft=[-5.33,3.80,-8.10],roofRight=[6.02,3.80,-8.10];
+ function beam(a,b,w,h,col){const m=rod(table,a,b,w/2,col,1); // Use the same stable alignment for rectangular timber.
+  m.geometry=Geo.box(.045);m.scale=[w,Math.hypot(...b.map((x,i)=>x-a[i])),h];return m;
+ }
+ beam(roofLeft,roofPeak,.31,.39,C.lightWood);beam(roofPeak,roofRight,.31,.39,C.lightWood);
+ box(table,.33,3.76,-8.10,11.18,.23,.27,C.wood,1,.045);
+ // The small wooden sign faces the viewer.
+ box(table,.32,2.99,-7.99,3.44,.84,.15,C.wood,1,.07);
+ box(table,.32,3.01,-7.90,3.22,.64,.025,C.cream,0,.06);
+ label('LITTLE GARDEN',.32,3.04,-7.867,2.85,.44,{font:'400 72px sans-serif',colorText:'#809268',vertical:true});
+ rod(table,[-.75,3.42,-7.99],[-.75,3.7,-7.99],.016,C.dark);rod(table,[1.35,3.42,-7.99],[1.35,3.7,-7.99],.016,C.dark);
+ // Sagging garland and warm little bulbs.
+ const curve=[];for(let k=0;k<=20;k++){const t=k/20;curve.push([-4.91+10.52*t,3.66-Math.sin(t*PI)*.36,-7.66]);if(k)rod(table,curve[k-1],curve[k],.017,'#8c9168');}
+ for(let i=1;i<8;i++){const t=i/8,x=-4.91+10.52*t,y=3.66-Math.sin(t*PI)*.36;rod(table,[x,y,-7.66],[x,y-.22,-7.66],.015,C.dark);cyl(table,x,y-.25,-7.66,.092,.11,C.brass);lights.push(sphere(table,x,y-.36,-7.66,.115,.16,.115,'#fff1bf',3));}
+ // Alternating leaves on both rafters give the silhouette its botanical character.
+ for(const [a,b] of [[roofLeft,roofPeak],[roofPeak,roofRight]]){
+  for(let i=0;i<11;i++){const t=(i+.4)/11,x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t-.16;const lf=leaf(table,x,y,-7.86,.42+rand()*.17,i%2?.85:2.5,-1.0,pick(['#a7bd78','#91aa63','#c0ce95','#779958']),1.0);vines.push({mesh:lf,angle:lf.rotation[2],phase:rand()*6});}
+ }
+ function plantPot(parent,x,y,z,scale=1,tall=false,shade=C.cream){
+  const g=new Node().at(x,y,z).size(scale);parent.add(g);cyl(g,0,.04,0,1.12,.10,'#cabd94');cyl(g,0,.55,0,.79,1.02,shade,1.28);torus(g,0,1.05,0,.52,.075,shade);cyl(g,0,1.054,0,.91,.022,C.soil);
+  for(let i=0;i<12;i++){const a=i*2*PI/12;rod(g,[Math.cos(a)*.42,.14,Math.sin(a)*.42],[Math.cos(a)*.50,.94,Math.sin(a)*.50],.011,'#d1c7a4');}
+  const plant=new Node().at(0,1.055,0);g.add(plant);
+  for(let i=0;i<(tall?10:9);i++){const a=i*2.399,ht=tall?.62+rand()*.9:.14+rand()*.4;const px=Math.cos(a)*.16,pz=Math.sin(a)*.16;rod(plant,[px,0,pz],[Math.cos(a)*.37,ht,Math.sin(a)*.37],.023,C.green);const len=tall?1.2+rand()*.8:.7+rand()*.55;leaf(plant,Math.cos(a)*.30,ht*.8,Math.sin(a)*.30,len,-a+PI/2,tall?.72+rand()*.50:.32+rand()*.8,pick(['#789954','#9cb370','#698c47','#acc27e']),tall?.70:.80);}
+  return g;
+ }
+ // Quiet still-life around the table: potted greens, watering can and seed packets.
+ plantPot(root,-6.68,-1.66,4.9,1.0,true);
+ plantPot(table,-4.55,.76,-6.85,.48,false,'#e1d3ac'); // On the rear rim, outside the tile target area.
+ plantPot(root,7.10,-1.68,-3.65,.78,true,'#b5bd8f');
+ const stool=new Node().at(6.85,-1.67,4.95);root.add(stool);for(const x of [-.48,.48])for(const z of [-.45,.45])cyl(stool,x,.47,z,.13,.85,C.wood);box(stool,0,.91,0,1.32,.16,1.20,C.lightWood,1,.08);plantPot(stool,0,1.0,0,.53,false);
+ // Braided mat beneath a sage-green watering can.
+ cyl(root,-5.75,-1.682,7.23,2.4,.035,'#d8cd9f');for(let i=0;i<7;i++)torus(root,-5.75,-1.65,7.23,.67+i*.08,.011,'#e9dfb9');
+ const can=new Node().at(-5.80,-1.62,7.22).rot(0,-.38,0);root.add(can);cyl(can,0,.57,0,1.02,1.05,'#8fa883',1.07);cyl(can,0,1.10,0,1.08,.11,'#9bb48e');cyl(can,0,1.16,0,.32,.035,'#667f5b');torus(can,-.45,.76,0,.42,.11,'#7b9871').rot(PI/2,0,0);rod(can,[.33,.30,.05],[1.23,1.15,.05],.095,'#91a67d');const head=cyl(can,1.30,1.20,.05,.36,.16,'#a1b58c');head.rotation[2]=-.78;for(let i=0;i<5;i++)sphere(can,1.37,1.28+(i-2)*.045,.05,.013,.012,.012,'#6e855a');
+ // Lantern and a small kraft seed envelope.
+ const lantern=new Node().at(-3.73,-1.65,8.19);root.add(lantern);cyl(lantern,0,.08,0,.55,.13,'#c2ad70');cyl(lantern,0,.74,0,.55,.11,'#dcc482');for(let i=0;i<4;i++){const a=i*PI/2;rod(lantern,[Math.cos(a)*.20,.15,Math.sin(a)*.20],[Math.cos(a)*.20,.73,Math.sin(a)*.20],.028,'#c9b777');}cyl(lantern,0,.37,0,.17,.46,'#fff0bb');torus(lantern,0,.94,0,.15,.11,'#b7a46d').rot(PI/2,0,0);
+ const packet=box(root,-4.18,-1.57,6.41,.72,.13,.94,'#dbcb9f',0,.04);packet.rot(0,-.37,0);leaf(root,-4.18,-1.485,6.53,.40,-.2,0,'#8ea26d');
+ for(let i=0;i<8;i++){const x=6.3+rand()*2.0,z=7.2+rand()*1.6;sphere(root,x,-1.60,z,.10+rand()*.16,.06+rand()*.04,.14+rand()*.20,pick(['#cfceb3','#c3c8a4','#e4dfc6']));}
+ leaf(root,7.53,-1.60,8.11,.46,-.7,.03,'#8fa765');leaf(root,-6.79,-1.60,5.65,.40,2,.1,'#a5b875');
+ // The moving pearl ball, a small contact shadow and a short physical trail.
+ const ball=new Node();table.add(ball);const ballMesh=sphere(ball,0,0,0,CFG.ballR,CFG.ballR,CFG.ballR,'#fbf6da',2);
+ sphere(ball,-.068,.11,.143,.040,.032,.027,'#ffffff',3).rot(-.3,0,-.4);
+ const ballShadow=mesh(Geo.sphere(16,8),'#b5bc91',0,table,0,.876,0,.25,.013,.25);ballShadow.castShadow=false;
+ for(let i=0;i<14;i++){const m=sphere(table,0,0,0,.10,.07,.10,'#d5ddab',3);m.visible=false;m.castShadow=false;trail.push(m);}
+ for(let i=0;i<96;i++){const m=leaf(table,0,0,0,.15,0,0,pick(['#a8bd76','#c6cd8c','#ebd898','#90ab65']));m.visible=false;m.castShadow=false;particles.push({mesh:m,life:0,vx:0,vy:0,vz:0});}
+ let particleCursor=0;
+ const puff=(x,z,amount=5,win=false)=>{for(let k=0;k<amount;k++){const p=particles[(particleCursor++)%particles.length],a=rand()*2*PI;p.life=.55+rand()*.8;p.total=p.life;p.mesh.visible=true;p.mesh.position=[x,.99+(win?2.0+rand()*3:0),z];p.vx=Math.cos(a)*(.2+rand()*.6);p.vy=.55+rand()*1.4;p.vz=Math.sin(a)*(.2+rand()*.6);p.mesh.rotation=[rand()*3,rand()*6,rand()*3];p.mesh.scale=[.09+rand()*.14,.15,.15];}};
+ const ballHistory=[];let wonTime=-1,visualTime=0,lastState='';
+ function grow(tile){const t=tileModels[tile.index];t.age=0;t.plant.visible=true;t.plant.size(.005);puff(tile.x,tile.z,4);}
+ function reset(){tileModels.forEach(t=>{t.age=-1;t.plant.visible=false;t.base.color=[...t.bare];t.seed.visible=true;t.bud.color=color('#bbc986');t.bud.size(.036,.058,.036)});particles.forEach(p=>{p.life=0;p.mesh.visible=false});ballHistory.length=0;wonTime=-1;bumperModels.forEach(b=>b.kick=0);}
+ function win(){wonTime=0;for(let i=0;i<14;i++){const t=physics.tiles[Math.floor(rand()*physics.tiles.length)];puff(t.x,t.z,6,true);}}
+ function update(dt,reducedMotion=false){
+  visualTime+=dt;const st=physics.state;
+  for(let i=0;i<tileModels.length;i++){const t=tileModels[i];if(t.age<0){if(physics.count>=68){const f=(.5+.5*Math.sin(visualTime*2.7+i*.2))*.16;const hint=color('#f5e6b5');t.base.color=t.bare.map((v,k)=>v+(hint[k]-v)*f);}continue;}t.age+=dt;
+   const s=Math.min(1,t.age/(reducedMotion?.04:.52)),back=1+2.2*Math.pow(s-1,3)+1.2*Math.pow(s-1,2);t.plant.size(Math.max(.003,back));
+   const green=color('#c0cc99'),blend=Math.min(1,t.age*2);t.base.color=t.bare.map((v,k)=>v+(green[k]-v)*blend);t.seed.visible=false;
+   if(!reducedMotion&&i%2===0)t.plant.rotation[2]=Math.sin(visualTime*1.2+t.phase)*.017;
+   if(wonTime>=0&&i%9===0){t.bud.color=color('#f5e8b8');t.bud.size(.095,.095,.095);}
+  }
+  physics.flippers.forEach((f,i)=>{flipperModels[i].rotation[1]=i===0?-f.angle:PI+f.angle;});
+  bumperModels.forEach(b=>{b.kick=Math.max(0,b.kick-dt*4);b.flower.position[1]=Math.sin(b.kick*PI)*.10;b.flower.scale[1]=1-Math.sin(b.kick*PI)*.2;});
+  const b=physics.ball;ball.position=[b.x,1.115-(st==='playing'?Math.max(0,b.z-6.8)*.75:0),b.z];ball.visible=st!=='won';ballShadow.visible=st==='playing';ballShadow.position[0]=b.x+.035;ballShadow.position[2]=b.z+.018;
+  if(st==='ready'){ball.position[1]+=Math.sin(visualTime*2)*.014;launchRing.visible=true;launchRing.size(.39+Math.sin(visualTime*2)*.04);}else launchRing.visible=false;
+  if(st==='playing'&&!physics.paused){ballHistory.unshift([...ball.position]);if(ballHistory.length>16)ballHistory.pop();}else if(st!=='playing')ballHistory.length=0;
+  trail.forEach((m,i)=>{const p=ballHistory[i+2];m.visible=!!p&&st==='playing'&&!reducedMotion;if(p){m.position=[...p];const s=.077*(1-i/trail.length);m.size(s,s*.7,s);}});
+  for(const p of particles){if(p.life<=0)continue;p.life-=dt;if(p.life<=0){p.mesh.visible=false;continue;}p.mesh.position[0]+=p.vx*dt;p.mesh.position[1]+=p.vy*dt;p.mesh.position[2]+=p.vz*dt;p.vy-=1.3*dt;p.mesh.rotation[0]+=dt*1.8;p.mesh.rotation[2]+=dt*2.0;const scale=Math.min(1,p.life*3);p.mesh.scale=[.16*scale,.16*scale,.16*scale];}
+  if(!reducedMotion)vines.forEach(v=>v.mesh.rotation[2]=Math.sin(visualTime*.8+v.phase)*.037);
+  if(wonTime>=0)wonTime+=dt;
+  if(st!==lastState){if(st!=='playing')ballHistory.length=0;lastState=st;}
+ }
+ return{root,table,ball,ballShadow,tileModels,bumperModels,flipperModels,floor,update,grow,reset,win,puff,launchRing,lights};
+}
+window.createGarden=createGarden;
+})();
+</script>
+<script>/* Interface, audio, input routing and the fixed-step game loop. */
+(() => {
+'use strict';
+const $=id=>document.getElementById(id),icon=name=>`<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
+let renderer,physics,garden,raf=0;const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canvas=$('world'),stage=document.querySelector('.stage');
+let soundEnabled=false,audio=null,master=null,lastGrowSound=0,topView=false,sunset=false,zen=false,modalPreviousPause=false,modalKind='',modalOpener=null,toastTimer=0,winDelay=-1,winShown=false,lastMilestone=0,frameTime=0,accumulatedRealTime=0;
+const held={left:new Set(),right:new Set()};
+function toast(text,duration=3100){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),duration);}
+function announce(text){$('announcer').textContent=text;}
+function audioStart(){if(!soundEnabled)return;try{if(!audio){audio=new(window.AudioContext||window.webkitAudioContext)();master=audio.createGain();master.gain.value=.30;master.connect(audio.destination);}if(audio.state==='suspended')audio.resume();}catch{soundEnabled=false;$('sound').innerHTML=icon('mute');toast('当前浏览器暂时无法播放声音，仍可安静地种花。');}}
+function tone(frequency,duration=.22,volume=.1,wave='sine',delay=0){if(!soundEnabled||!audio||audio.state!=='running')return;const o=audio.createOscillator(),g=audio.createGain(),t=audio.currentTime+delay;o.type=wave;o.frequency.setValueAtTime(frequency,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(master);o.start(t);o.stop(t+duration+.03);o.onended=()=>{o.disconnect();g.disconnect()};}
+function clearHeld(){held.left.clear();held.right.clear();physics?.clearInput();document.querySelectorAll('[data-flipper]').forEach(b=>b.classList.remove('pressed'));}
+function setHeld(side,source,down){if(!physics)return;if(down){if(physics.paused||$('modal').open||physics.state==='won')return;held[side].add(source);}else held[side].delete(source);physics.setInput(side,held[side].size>0);document.querySelectorAll(`[data-flipper="${side}"]`).forEach(b=>b.classList.toggle('pressed',held[side].size>0));}
+function showPause(){if(!physics)return;$('pause-overlay').hidden=!physics.paused||$('modal').open||physics.state==='won';$('pause').setAttribute('aria-pressed',String(physics.paused));$('pause').setAttribute('aria-label',physics.paused?'继续游戏':'暂停游戏');$('pause').title=physics.paused?'继续 · P':'暂停 · P';$('pause').innerHTML=icon(physics.paused?'play':'pause');updateUI();}
+function updateUI(){if(!physics)return;const p=physics.progress,percent=Math.floor(p*100),st=physics.state;
+ $('coverage').textContent=percent;$('tile-count').textContent=physics.count;$('tile-total').textContent=physics.tiles.length;$('progress-fill').style.width=(p*100)+'%';document.querySelector('.progress-track').setAttribute('aria-valuenow',String(percent));document.querySelector('.progress-track').setAttribute('aria-valuetext',`${physics.count} 块瓦片已苏醒，共 ${physics.tiles.length} 块`);
+ $('growth-phase').textContent=p===0?'等一片新绿':p<.25?'新芽初醒':p<.5?'绿意萌生':p<.75?'叶影渐浓':p<1?'即将满园':'满园新绿';
+ let text,hint,disabled=false;if(physics.paused){text='继续这片绿意';hint='按 P 或点击，继续生长';}else if(st==='ready'){text=physics.shots?'再送一颗小球':'让花园苏醒';hint=`<kbd>SPACE</kbd> ${physics.shots?'或点击续球 · 已长出的绿叶会保留':'或点击发射第一颗弹珠'}`;}else if(st==='won'){text='再种一座花园';hint='80 / 80 · 每一块瓦片都长出了叶子';}else {text=st==='launching'?'小球出发了…':'绿意，正在发生';hint='<kbd>A / ←</kbd> 左挡板 <span>·</span> <kbd>D / →</kbd> 右挡板';disabled=true;}
+ $('launch-text').textContent=text;$('launch').disabled=disabled;$('launch-hint').innerHTML=hint;
+ $('scene-caption').textContent=st==='won'?'一座花园，因你而生':physics.count>=68?`还剩 ${80-physics.count} 块瓦片 · 寻找浅色的小岛`:physics.shots?`第 ${String(physics.shots).padStart(2,'0')} 颗弹珠 · 绿意会留下`:'木头的温度 · 春日的光';
+ $('ball-note-text').textContent=physics.shots?'再来一颗，继续生长':'从一颗小球开始';
+}
+function launch(){if(!physics||$('modal').open)return;audioStart();if(physics.paused){physics.togglePause();showPause();return;}if(physics.state==='won'){reset();physics.launch();return;}physics.launch();}
+function reset(){clearHeld();winDelay=-1;winShown=false;lastMilestone=0;physics.reset();garden.reset();updateUI();showPause();}
+const modals={
+ help:()=>`<div class="modal-art">${icon('sprout')}</div><p class="modal-eyebrow">A SMALL GUIDE TO GROWING</p><h2 id="modal-title">给小球一点方向，<br>给花园一点时间。</h2><ol class="steps"><li><span class="step-num">01</span><div><strong>送出一颗弹珠</strong><p>按空格或点击发射按钮，小球便会进入花园。</p></div></li><li><span class="step-num">02</span><div><strong>用两个挡板，接住下一次生长</strong><p>A / ← 控制左挡板，D / → 控制右挡板。<br>按住会抬起挡板，松开则落下；碰撞的位置会改变出球方向。手机可同时按住下方两侧按钮。</p></div></li><li><span class="step-num">03</span><div><strong>让 80 块瓦片，全部长出绿叶</strong><p>弹珠经过或触碰瓦片，叶子便会生长。绿化达到 100% 即通关。掉球不清空进度，重新发射即可继续。</p></div></li></ol><div class="shortcut-table"><span><kbd>P</kbd>暂停 / 继续</span><span><kbd>V</kbd>切换视角</span><span><kbd>M</kbd>声音开关</span><span><kbd>N</kbd>轻风助推</span></div><p class="modal-small">没有倒计时，也没有生命限制。轻风助推会给弹珠一个小小的推力，冷却 6 秒，不会自动激活瓦片。</p><button class="modal-primary" data-action="close">去种一点绿意 ${icon('arrow')}</button>`,
+ about:()=>`<div class="modal-art">${icon('leaf')}</div><p class="modal-eyebrow">LEAF & LITTLE / NO. 001</p><h2 id="modal-title">叶间，一方小花园。</h2><p class="modal-copy">这是一个关于弹珠与生长的小实验。<br>让略带温度的木头、慢慢舒展的叶子，<br>陪你度过一小段不必赶路的时间。</p><p class="modal-quote">“每一次小小的碰撞，<br>都可以让世界绿一点。”</p><p class="modal-copy">核心玩法来自《弹珠绿叶游戏》概念文档：控制下方双挡板，让弹珠经过瓦片并长出绿叶，绿化达到 100% 即通关。</p><p class="modal-small">本原型补充了不限时续球、三枚雏菊碰撞柱、轻风助推、双视角和昼暮光照。所有模型与音效均在本地实时生成，不上传数据，不请求网络资源。本轮进度在刷新或关闭页面后重置。</p><button class="modal-primary" data-action="close">回到小花园 ${icon('arrow')}</button>`,
+ restart:()=>`<div class="modal-art">${icon('restart')}</div><p class="modal-eyebrow">A FRESH LITTLE BEGINNING</p><h2 id="modal-title">重新播种这座花园？</h2><p class="modal-copy">现在已经有 ${physics.count} 块瓦片长出了叶子。<br>重新播种会清空本轮绿化进度，从第一颗弹珠开始。</p><button class="modal-primary" data-action="reset">重新播种 ${icon('sprout')}</button><button class="modal-secondary" data-action="close">留在这片绿意里</button>`,
+ win:()=>`<div class="modal-art">${icon('sprout')}</div><p class="modal-eyebrow">EVERY LITTLE LEAF COUNTS</p><h2 id="modal-title">一座花园，<br>因你而生。</h2><p class="modal-copy">最后一片新叶，也已经舒展开来。<br>谢谢你，让每一个角落都长出了绿意。</p><div class="win-stats"><div><strong>100<small>%</small></strong><small>绿意覆盖</small></div><div><strong>80<small> / 80</small></strong><small>瓦片已苏醒</small></div><div><strong>${physics.shots}</strong><small>颗小球的旅行</small></div></div><button class="modal-primary" data-action="close">再看看我的花园 ${icon('leaf')}</button><button class="modal-secondary" data-action="reset">再种一座小花园</button>`
+};
+function openModal(kind){if(!physics||$('modal').open)return;modalOpener=document.activeElement;modalKind=kind;modalPreviousPause=physics.paused;physics.paused=true;clearHeld();$('modal-body').innerHTML=modals[kind]();$('modal').showModal();showPause();}
+function closeModal(){if(!$('modal').open)return;$('modal').close();physics.paused=modalPreviousPause;physics.accumulator=0;showPause();modalOpener?.focus?.({preventScroll:true});modalKind='';}
+function requestRestart(){if(!physics||$('modal').open)return;if(physics.count===0&&physics.state==='ready'){reset();toast('一张空白的瓦片，也是一种新的开始。');}else openModal('restart');}
+function nudge(){if(!physics||$('modal').open)return;audioStart();if(physics.nudge()){tone(392,.35,.06);tone(587.3,.25,.045,'sine',.06);toast('借一点风，去还没去过的角落。',1800);}else if(physics.state==='ready')toast('先发射一颗弹珠，再借一点风。');else if(physics.nudgeCooldown>0)toast(`微风正在回来 · 再等 ${Math.ceil(physics.nudgeCooldown)} 秒`,1500);}
+function switchView(){topView=!topView;$('view').setAttribute('aria-pressed',String(topView));$('view').setAttribute('aria-label',topView?'切换立体视角':'切换俯视视角');toast(topView?'俯看花园 · 更容易找到还没长叶的瓦片':'回到微缩花园视角',2100);}
+function toggleSound(){soundEnabled=!soundEnabled;audioStart();$('sound').innerHTML=icon(soundEnabled?'volume':'mute');$('sound').setAttribute('aria-pressed',String(soundEnabled));$('sound').setAttribute('aria-label',soundEnabled?'关闭声音':'开启声音');$('sound').title=soundEnabled?'关闭声音 · M':'开启声音 · M';if(soundEnabled){tone(523.25,.4,.09);tone(783.99,.5,.06,'sine',.08);}else if(audio?.state==='running')audio.suspend();toast(soundEnabled?'听见碰撞，也听见新叶生长。':'安静一点，也很好。',1700);}
+try{
+ renderer=new Garden3D.Renderer(canvas);physics=new GardenPhysics.Pinball();garden=createGarden(renderer,physics);
+ physics.callbacks={
+  grow(tile){garden.grow(tile);const now=performance.now();if(now-lastGrowSound>78){lastGrowSound=now;const notes=[523.25,587.33,659.25,783.99,880,1046.5];tone(notes[(tile.index+physics.count)%notes.length],.28,.045);}updateUI();
+   const milestone=Math.floor(physics.progress*4);if(milestone>lastMilestone&&milestone<4){lastMilestone=milestone;toast(milestone===1?'四分之一的花园，已经醒来。':milestone===2?'绿意过半，小小的坚持正在发芽。':'再一点点，绿叶就能铺满整个花园。');announce(`绿化已达到 ${Math.floor(physics.progress*100)}%`);}
+  },
+  launch(){tone(330,.20,.055,'triangle');tone(660,.27,.07,'sine',.08);updateUI();},
+  play(){updateUI();},
+  flip(){tone(136,.075,.045,'triangle');},
+  paddle(){tone(220,.12,.075,'triangle');},
+  bumper(i){garden.bumperModels[i].kick=1;tone([659.25,783.99,987.77][i],.40,.07);tone([1318.5,1567.98,1975.5][i],.22,.022);},
+  wall(speed){tone(175+speed*5,.07,.014,'triangle');},
+  drain(){clearHeld();updateUI();tone(329.6,.26,.04);tone(261.6,.3,.045,'sine',.13);toast('小球去散步了，绿意会留下。再发一颗吧。',3600);announce('弹珠掉落，已保留绿化进度。按空格或发射按钮继续。');},
+  pause(){clearHeld();showPause();},
+  win(){garden.win();clearHeld();updateUI();winDelay=0;[523.25,659.25,783.99,1046.5,1318.5].forEach((n,i)=>tone(n,1.2,.06,'sine',i*.16));announce('绿化覆盖率百分之百，全部八十块瓦片都已长出绿叶，恭喜通关。');}
+ };
+ $('launch').addEventListener('click',launch);$('howto').addEventListener('click',()=>openModal('help'));$('about').addEventListener('click',()=>openModal('about'));$('restart').addEventListener('click',requestRestart);$('modal-close').addEventListener('click',closeModal);$('modal').addEventListener('cancel',e=>{e.preventDefault();closeModal()});$('modal').addEventListener('click',e=>{if(e.target===$('modal')){const r=$('modal').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeModal();}});
+ $('modal-body').addEventListener('click',e=>{const action=e.target.closest('[data-action]')?.dataset.action;if(!action)return;if(action==='close')closeModal();if(action==='reset'){closeModal();reset();toast('新的一页，等你种下第一片绿。');}});
+ $('pause').addEventListener('click',()=>{if(!$('modal').open){physics.togglePause();showPause()}});$('resume').addEventListener('click',()=>{physics.togglePause();showPause()});$('nudge').addEventListener('click',nudge);$('sound').addEventListener('click',toggleSound);$('view').addEventListener('click',switchView);
+ $('daylight').addEventListener('click',()=>{sunset=!sunset;document.body.classList.toggle('sunset',sunset);$('daylight').innerHTML=icon(sunset?'sunset':'sun')+`<span>${sunset?'暖暮':'日光'}</span>`;$('day-caption').textContent=sunset?'日落 · 暖风':'午后 · 微风';toast(sunset?'把春日，调成温柔的傍晚。':'一束午后的光，落在小花园里。',1800);});
+ $('zen').addEventListener('click',()=>{zen=!zen;document.body.classList.toggle('zen',zen);$('zen').querySelector('span').textContent=zen?'退出沉浸':'沉浸一下';$('zen').setAttribute('aria-pressed',String(zen));setTimeout(resize,30);});
+ document.querySelectorAll('[data-flipper]').forEach(button=>{
+  button.addEventListener('pointerdown',e=>{e.preventDefault();audioStart();button.setPointerCapture(e.pointerId);setHeld(button.dataset.flipper,'pointer:'+e.pointerId,true);});
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(event,e=>setHeld(button.dataset.flipper,'pointer:'+e.pointerId,false));
+  button.addEventListener('contextmenu',e=>e.preventDefault());
+ });
+ const keySides={KeyA:'left',ArrowLeft:'left',KeyD:'right',ArrowRight:'right'};
+ document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select,[contenteditable=true]'))return;if($('modal').open)return;
+  if(keySides[e.code]){e.preventDefault();audioStart();setHeld(keySides[e.code],'key:'+e.code,true);return;}
+  if(e.code==='Enter'&&e.target.dataset.flipper){e.preventDefault();setHeld(e.target.dataset.flipper,'key:Enter',true);return;}
+  if(['Space','KeyP','KeyV','KeyM','KeyN','KeyR'].includes(e.code)){e.preventDefault();if(e.repeat)return;({Space:launch,KeyP:()=>physics.togglePause(),KeyV:switchView,KeyM:toggleSound,KeyN:nudge,KeyR:requestRestart})[e.code]();}
+  if(e.code==='Escape'&&zen)$('zen').click();
+ });
+ document.addEventListener('keyup',e=>{if(keySides[e.code]){e.preventDefault();setHeld(keySides[e.code],'key:'+e.code,false);}if(e.code==='Enter'){setHeld('left','key:Enter',false);setHeld('right','key:Enter',false);}});
+ function autoPause(){clearHeld();if((physics.state==='playing'||physics.state==='launching')&&!physics.paused){physics.togglePause();showPause();}}
+ window.addEventListener('blur',autoPause);document.addEventListener('visibilitychange',()=>{if(document.hidden)autoPause();});
+ $('retry').addEventListener('click',()=>location.reload());
+ canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);autoPause();$('fallback').hidden=false;$('fallback').querySelector('h2').textContent='3D 画面暂时断开了';$('fallback').querySelector('p').textContent='点击重新尝试将重新载入网页，并开始一座新花园。';});
+ const baseEye=[10.8,22.5,28.5],baseTarget=[.3,.94,-.37];renderer.eye=[...baseEye];renderer.target=[...baseTarget];
+ function resize(){const r=stage.getBoundingClientRect();if(r.width<=0||r.height<=0)return;const mobile=innerWidth<=900;renderer.resize(r.width,r.height,Math.min(devicePixelRatio||1,mobile?1.6:1.65));renderer.height=Math.max(topView?22.0:21.4,(topView?20.5:23.1)/(r.width/r.height));renderer.updateCamera();}
+ const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);window.addEventListener('resize',resize);resize();updateUI();
+ let last=performance.now(),loaded=false;
+ function frame(now){const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;frameTime=dt;accumulatedRealTime+=dt;
+  physics.update(dt);garden.update(dt,reducedMotion);
+  if(winDelay>=0&&!winShown&&!physics.paused){winDelay+=dt;if(winDelay>1.35){winShown=true;openModal('win');}}
+  const eye=topView?[.01,36,4.0]:baseEye,tar=topView?[.25,.5,-.22]:baseTarget,f=reducedMotion?1:1-Math.exp(-dt*4);
+  renderer.eye=renderer.eye.map((v,i)=>v+(eye[i]-v)*f);renderer.target=renderer.target.map((v,i)=>v+(tar[i]-v)*f);
+  const desiredHeight=Math.max(topView?22.0:21.4,(topView?20.5:23.1)/(renderer.w/renderer.h));renderer.height+=(desiredHeight-renderer.height)*f;
+  const bg=Garden3D.color(sunset?'#eee7dc':'#f3f0e5'),sun=sunset?[1.17,.88,.66]:[1.04,1.0,.86];renderer.background=renderer.background.map((v,i)=>v+(bg[i]-v)*f*.6);garden.floor.color=[...renderer.background];renderer.sun=renderer.sun.map((v,i)=>v+(sun[i]-v)*f*.6);
+  renderer.render(garden.root);
+  const note=$('ball-note'),showNote=physics.state==='ready'&&!physics.paused&&!$('modal').open;if(showNote){const [x,y]=renderer.project([5.13,1.15,6.25]);note.style.left=Math.min(renderer.w-note.offsetWidth-12,Math.max(12,x+9))+'px';note.style.top=Math.max(25,y-47)+'px';}note.style.opacity=showNote?'1':'0';
+  $('nudge').querySelector('.cooldown-dot').hidden=physics.nudgeCooldown<=0;
+  if(!loaded){loaded=true;$('loading').style.opacity='0';setTimeout(()=>$('loading').hidden=true,500);document.body.dataset.ready='true';}
+  raf=requestAnimationFrame(frame);
+ }
+ raf=requestAnimationFrame(frame);
+ // Read-only status for inspection. Mutation helpers exist only with ?test=1.
+ window.gardenStatus=()=>({...physics.snapshot(),view:topView?'top':'isometric',sound:soundEnabled,light:sunset?'sunset':'day',zen});
+ if(new URLSearchParams(location.search).has('test'))window.__gardenTest={physics,garden,renderer,advance(seconds){for(let t=0;t<seconds;t+=1/120){physics.update(1/120);garden.update(1/120,true);}updateUI();renderer.render(garden.root);return physics.snapshot();},reset,updateUI};
+}catch(error){console.error('Garden initialization failed:',error);$('loading').hidden=true;$('fallback').hidden=false;$('launch').disabled=true;$('launch-text').textContent='请先开启 3D 支持';$('retry').onclick=()=>location.reload();}
+})();
+</script>
+</body>
+</html>
