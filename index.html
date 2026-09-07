@@ -479,8 +479,8 @@ let soundEnabled=true,audio=null,master=null,lastGrowSound=0,topView=false,sunse
 const held={left:new Set(),right:new Set()};
 // The anon key is intentionally public. Replace both placeholders with values
 // from Supabase Project Settings → API; never place a service_role key here.
-const SUPABASE_URL='YOUR_SUPABASE_PROJECT_URL';
-const SUPABASE_ANON_KEY='YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL='https://voxwwibdlkukjpgpnnqo.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_nUyIohLnO0kiWmpw4xo_oA_KT7_AzxQ';
 const isSupabaseConfigured=()=>/^https:\/\/.+\.supabase\.co$/i.test(SUPABASE_URL)&&!SUPABASE_ANON_KEY.startsWith('YOUR_');
 const escapeHTML=value=>String(value).replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
 function formatCompletionDate(value){try{return new Intl.DateTimeFormat('zh-CN',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(value));}catch{return '刚刚';}}
