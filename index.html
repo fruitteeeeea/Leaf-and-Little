@@ -14,6 +14,7 @@
 @media(max-height:720px) and (max-width:900px){.app{min-height:540px}.header{height:60px}.intro{padding-top:4px}h1{font-size:25px;line-height:1.35;margin-top:8px}.eyebrow{font-size:6px}.growth-card{top:0;padding:7px 10px;width:116px}.growth-main{margin:4px 0 6px}.percent{font-size:29px}.growth-heading{font-size:8px}.growth-foot{margin-top:5px}.stage{top:98px;bottom:132px}.launch-button{bottom:129px;height:39px}.launch-hint{bottom:113px}.mobile-controls{bottom:60px}.footer{height:53px}.scene-label{display:none}.toast{bottom:181px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
+<style>.modal-recommend{margin:22px 0;padding:17px 18px 16px;border:1px solid #d9e1ca;border-radius:14px;background:#eef1e580}.modal-recommend .modal-eyebrow{margin-bottom:8px}.modal-recommend strong{font-family:var(--serif);font-size:16px;font-weight:400;color:#627a51}.modal-recommend p:not(.modal-eyebrow){margin:7px 0 12px;font-size:11px;line-height:1.8;color:#829074}.modal-work-link{display:inline-flex;align-items:center;color:#577345;font-size:11px;letter-spacing:.5px;text-decoration:underline;text-underline-offset:4px}.modal-work-link--quiet{display:block;width:max-content;margin:15px auto 0}</style>
 </head>
 <body>
 <svg class="icon-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -78,7 +79,7 @@
  <div class="footer-left"><span class="footer-number">NO. 001</span><span>A LITTLE PLAY.<br>A LITTLE GREEN.</span></div>
  <div class="tool-dock" role="toolbar" aria-label="花园设置">
   <button id="daylight" class="dock-button with-label" title="切换日光 / 暖暮" aria-label="切换日光与暖暮"><svg><use href="#i-sun"/></svg><span>日光</span></button><span class="dock-divider"></span>
-  <button id="sound" class="dock-button" title="开启声音 · M" aria-label="开启声音" aria-pressed="false"><svg><use href="#i-mute"/></svg></button>
+  <button id="sound" class="dock-button" title="关闭声音 · M" aria-label="关闭声音" aria-pressed="true"><svg><use href="#i-volume"/></svg></button>
   <button id="view" class="dock-button" title="切换俯视 / 立体视角 · V" aria-label="切换俯视视角" aria-pressed="false"><svg><use href="#i-view"/></svg></button>
   <button id="nudge" class="dock-button" title="轻风助推 · N · 冷却 6 秒" aria-label="轻风助推，快捷键 N"><svg><use href="#i-wind"/></svg><span class="cooldown-dot" hidden></span></button><span class="dock-divider"></span>
   <button id="pause" class="dock-button" title="暂停 · P" aria-label="暂停游戏" aria-pressed="false"><svg><use href="#i-pause"/></svg></button>
@@ -472,11 +473,12 @@ window.createGarden=createGarden;
 const $=id=>document.getElementById(id),icon=name=>`<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
 let renderer,physics,garden,raf=0;const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const canvas=$('world'),stage=document.querySelector('.stage');
-let soundEnabled=false,audio=null,master=null,lastGrowSound=0,topView=false,sunset=false,zen=false,modalPreviousPause=false,modalKind='',modalOpener=null,toastTimer=0,winDelay=-1,winShown=false,lastMilestone=0,frameTime=0,accumulatedRealTime=0;
+let soundEnabled=true,audio=null,master=null,lastGrowSound=0,topView=false,sunset=false,zen=false,modalPreviousPause=false,modalKind='',modalOpener=null,toastTimer=0,winDelay=-1,winShown=false,lastMilestone=0,frameTime=0,accumulatedRealTime=0;
 const held={left:new Set(),right:new Set()};
 function toast(text,duration=3100){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),duration);}
 function announce(text){$('announcer').textContent=text;}
-function audioStart(){if(!soundEnabled)return;try{if(!audio){audio=new(window.AudioContext||window.webkitAudioContext)();master=audio.createGain();master.gain.value=.30;master.connect(audio.destination);}if(audio.state==='suspended')audio.resume();}catch{soundEnabled=false;$('sound').innerHTML=icon('mute');toast('当前浏览器暂时无法播放声音，仍可安静地种花。');}}
+function setSoundUI(){const button=$('sound');button.innerHTML=icon(soundEnabled?'volume':'mute');button.setAttribute('aria-pressed',String(soundEnabled));button.setAttribute('aria-label',soundEnabled?'关闭声音':'开启声音');button.title=soundEnabled?'关闭声音 · M':'开启声音 · M';}
+function audioStart(){if(!soundEnabled)return;try{if(!audio){audio=new(window.AudioContext||window.webkitAudioContext)();master=audio.createGain();master.gain.value=.30;master.connect(audio.destination);}if(audio.state==='suspended')audio.resume();}catch{soundEnabled=false;setSoundUI();toast('当前浏览器暂时无法播放声音，仍可安静地种花。');}}
 function tone(frequency,duration=.22,volume=.1,wave='sine',delay=0){if(!soundEnabled||!audio||audio.state!=='running')return;const o=audio.createOscillator(),g=audio.createGain(),t=audio.currentTime+delay;o.type=wave;o.frequency.setValueAtTime(frequency,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(master);o.start(t);o.stop(t+duration+.03);o.onended=()=>{o.disconnect();g.disconnect()};}
 function clearHeld(){held.left.clear();held.right.clear();physics?.clearInput();document.querySelectorAll('[data-flipper]').forEach(b=>b.classList.remove('pressed'));}
 function setHeld(side,source,down){if(!physics)return;if(down){if(physics.paused||$('modal').open||physics.state==='won')return;held[side].add(source);}else held[side].delete(source);physics.setInput(side,held[side].size>0);document.querySelectorAll(`[data-flipper="${side}"]`).forEach(b=>b.classList.toggle('pressed',held[side].size>0));}
@@ -493,16 +495,16 @@ function launch(){if(!physics||$('modal').open)return;audioStart();if(physics.pa
 function reset(){clearHeld();winDelay=-1;winShown=false;lastMilestone=0;physics.reset();garden.reset();updateUI();showPause();}
 const modals={
  help:()=>`<div class="modal-art">${icon('sprout')}</div><p class="modal-eyebrow">A SMALL GUIDE TO GROWING</p><h2 id="modal-title">给小球一点方向，<br>给花园一点时间。</h2><ol class="steps"><li><span class="step-num">01</span><div><strong>送出一颗弹珠</strong><p>按空格或点击发射按钮，小球便会进入花园。</p></div></li><li><span class="step-num">02</span><div><strong>用两个挡板，接住下一次生长</strong><p>A / ← 控制左挡板，D / → 控制右挡板。<br>按住会抬起挡板，松开则落下；碰撞的位置会改变出球方向。手机可同时按住下方两侧按钮。</p></div></li><li><span class="step-num">03</span><div><strong>让 80 块瓦片，全部长出绿叶</strong><p>弹珠经过或触碰瓦片，叶子便会生长。绿化达到 100% 即通关。掉球不清空进度，重新发射即可继续。</p></div></li></ol><div class="shortcut-table"><span><kbd>P</kbd>暂停 / 继续</span><span><kbd>V</kbd>切换视角</span><span><kbd>M</kbd>声音开关</span><span><kbd>N</kbd>轻风助推</span></div><p class="modal-small">没有倒计时，也没有生命限制。轻风助推会给弹珠一个小小的推力，冷却 6 秒，不会自动激活瓦片。</p><button class="modal-primary" data-action="close">去种一点绿意 ${icon('arrow')}</button>`,
- about:()=>`<div class="modal-art">${icon('leaf')}</div><p class="modal-eyebrow">LEAF & LITTLE / NO. 001</p><h2 id="modal-title">叶间，一方小花园。</h2><p class="modal-copy">这是一个关于弹珠与生长的小实验。<br>让略带温度的木头、慢慢舒展的叶子，<br>陪你度过一小段不必赶路的时间。</p><p class="modal-quote">“每一次小小的碰撞，<br>都可以让世界绿一点。”</p><p class="modal-copy">核心玩法来自《弹珠绿叶游戏》概念文档：控制下方双挡板，让弹珠经过瓦片并长出绿叶，绿化达到 100% 即通关。</p><p class="modal-small">本原型补充了不限时续球、三枚雏菊碰撞柱、轻风助推、双视角和昼暮光照。所有模型与音效均在本地实时生成，不上传数据，不请求网络资源。本轮进度在刷新或关闭页面后重置。</p><button class="modal-primary" data-action="close">回到小花园 ${icon('arrow')}</button>`,
+ about:()=>`<div class="modal-art">${icon('leaf')}</div><p class="modal-eyebrow">LEAF & LITTLE / NO. 001</p><h2 id="modal-title">叶间，一方小花园。</h2><p class="modal-copy">这是一个关于弹珠与生长的小实验。<br>让略带温度的木头、慢慢舒展的叶子，<br>陪你度过一小段不必赶路的时间。</p><p class="modal-quote">“每一次小小的碰撞，<br>都可以让世界绿一点。”</p><p class="modal-copy">核心玩法来自《弹珠绿叶游戏》概念文档：控制下方双挡板，让弹珠经过瓦片并长出绿叶，绿化达到 100% 即通关。</p><div class="modal-recommend"><p class="modal-eyebrow">ANOTHER LITTLE WORLD</p><strong>森间 MORI · 给灵感一间小屋</strong><p>一座可以旋转、探索与慢慢停留的互动 3D 数字花园工作室。</p><a class="modal-work-link" href="https://fruitteeeeea.github.io/mori-studio/mori-interactive.html" target="_blank" rel="noopener noreferrer">去森间坐坐 ↗</a></div><p class="modal-small">本原型补充了不限时续球、三枚雏菊碰撞柱、轻风助推、双视角和昼暮光照。所有模型与音效均在本地实时生成，不上传数据，不请求网络资源。本轮进度在刷新或关闭页面后重置。</p><button class="modal-primary" data-action="close">回到小花园 ${icon('arrow')}</button>`,
  restart:()=>`<div class="modal-art">${icon('restart')}</div><p class="modal-eyebrow">A FRESH LITTLE BEGINNING</p><h2 id="modal-title">重新播种这座花园？</h2><p class="modal-copy">现在已经有 ${physics.count} 块瓦片长出了叶子。<br>重新播种会清空本轮绿化进度，从第一颗弹珠开始。</p><button class="modal-primary" data-action="reset">重新播种 ${icon('sprout')}</button><button class="modal-secondary" data-action="close">留在这片绿意里</button>`,
- win:()=>`<div class="modal-art">${icon('sprout')}</div><p class="modal-eyebrow">EVERY LITTLE LEAF COUNTS</p><h2 id="modal-title">一座花园，<br>因你而生。</h2><p class="modal-copy">最后一片新叶，也已经舒展开来。<br>谢谢你，让每一个角落都长出了绿意。</p><div class="win-stats"><div><strong>100<small>%</small></strong><small>绿意覆盖</small></div><div><strong>80<small> / 80</small></strong><small>瓦片已苏醒</small></div><div><strong>${physics.shots}</strong><small>颗小球的旅行</small></div></div><button class="modal-primary" data-action="close">再看看我的花园 ${icon('leaf')}</button><button class="modal-secondary" data-action="reset">再种一座小花园</button>`
+ win:()=>`<div class="modal-art">${icon('sprout')}</div><p class="modal-eyebrow">EVERY LITTLE LEAF COUNTS</p><h2 id="modal-title">一座花园，<br>因你而生。</h2><p class="modal-copy">最后一片新叶，也已经舒展开来。<br>谢谢你，让每一个角落都长出了绿意。</p><div class="win-stats"><div><strong>100<small>%</small></strong><small>绿意覆盖</small></div><div><strong>80<small> / 80</small></strong><small>瓦片已苏醒</small></div><div><strong>${physics.shots}</strong><small>颗小球的旅行</small></div></div><button class="modal-primary" data-action="close">再看看我的花园 ${icon('leaf')}</button><a class="modal-work-link modal-work-link--quiet" href="https://fruitteeeeea.github.io/mori-studio/mori-interactive.html" target="_blank" rel="noopener noreferrer">也去《森间 MORI》坐坐 ↗</a><button class="modal-secondary" data-action="reset">再种一座小花园</button>`
 };
 function openModal(kind){if(!physics||$('modal').open)return;modalOpener=document.activeElement;modalKind=kind;modalPreviousPause=physics.paused;physics.paused=true;clearHeld();$('modal-body').innerHTML=modals[kind]();$('modal').showModal();showPause();}
 function closeModal(){if(!$('modal').open)return;$('modal').close();physics.paused=modalPreviousPause;physics.accumulator=0;showPause();modalOpener?.focus?.({preventScroll:true});modalKind='';}
 function requestRestart(){if(!physics||$('modal').open)return;if(physics.count===0&&physics.state==='ready'){reset();toast('一张空白的瓦片，也是一种新的开始。');}else openModal('restart');}
 function nudge(){if(!physics||$('modal').open)return;audioStart();if(physics.nudge()){tone(392,.35,.06);tone(587.3,.25,.045,'sine',.06);toast('借一点风，去还没去过的角落。',1800);}else if(physics.state==='ready')toast('先发射一颗弹珠，再借一点风。');else if(physics.nudgeCooldown>0)toast(`微风正在回来 · 再等 ${Math.ceil(physics.nudgeCooldown)} 秒`,1500);}
 function switchView(){topView=!topView;$('view').setAttribute('aria-pressed',String(topView));$('view').setAttribute('aria-label',topView?'切换立体视角':'切换俯视视角');toast(topView?'俯看花园 · 更容易找到还没长叶的瓦片':'回到微缩花园视角',2100);}
-function toggleSound(){soundEnabled=!soundEnabled;audioStart();$('sound').innerHTML=icon(soundEnabled?'volume':'mute');$('sound').setAttribute('aria-pressed',String(soundEnabled));$('sound').setAttribute('aria-label',soundEnabled?'关闭声音':'开启声音');$('sound').title=soundEnabled?'关闭声音 · M':'开启声音 · M';if(soundEnabled){tone(523.25,.4,.09);tone(783.99,.5,.06,'sine',.08);}else if(audio?.state==='running')audio.suspend();toast(soundEnabled?'听见碰撞，也听见新叶生长。':'安静一点，也很好。',1700);}
+function toggleSound(){soundEnabled=!soundEnabled;audioStart();setSoundUI();if(soundEnabled){tone(523.25,.4,.09);tone(783.99,.5,.06,'sine',.08);}else if(audio?.state==='running')audio.suspend();toast(soundEnabled?'听见碰撞，也听见新叶生长。':'安静一点，也很好。',1700);}
 try{
  renderer=new Garden3D.Renderer(canvas);physics=new GardenPhysics.Pinball();garden=createGarden(renderer,physics);
  physics.callbacks={
@@ -541,16 +543,18 @@ try{
  window.addEventListener('blur',autoPause);document.addEventListener('visibilitychange',()=>{if(document.hidden)autoPause();});
  $('retry').addEventListener('click',()=>location.reload());
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);autoPause();$('fallback').hidden=false;$('fallback').querySelector('h2').textContent='3D 画面暂时断开了';$('fallback').querySelector('p').textContent='点击重新尝试将重新载入网页，并开始一座新花园。';});
- const baseEye=[10.8,22.5,28.5],baseTarget=[.3,.94,-.37];renderer.eye=[...baseEye];renderer.target=[...baseTarget];
- function resize(){const r=stage.getBoundingClientRect();if(r.width<=0||r.height<=0)return;const mobile=innerWidth<=900;renderer.resize(r.width,r.height,Math.min(devicePixelRatio||1,mobile?1.6:1.65));renderer.height=Math.max(topView?22.0:21.4,(topView?20.5:23.1)/(r.width/r.height));renderer.updateCamera();}
+ const baseEye=[10.8,22.5,28.5],baseTarget=[.3,.94,-.37],panelEye=[.2,25.0,17.5],panelTarget=[.1,.82,-.10];renderer.eye=[...baseEye];renderer.target=[...baseTarget];
+ function cameraMode(){if(topView)return'top';return physics&&['launching','playing'].includes(physics.state)?'panel':'isometric';}
+ function cameraSettings(){const mode=cameraMode();if(mode==='top')return{eye:[.01,36,4.0],target:[.25,.5,-.22],height:22.0,portraitHeight:20.5};if(mode==='panel')return{eye:panelEye,target:panelTarget,height:18.2,portraitHeight:19.6};return{eye:baseEye,target:baseTarget,height:21.4,portraitHeight:23.1};}
+ function resize(){const r=stage.getBoundingClientRect();if(r.width<=0||r.height<=0)return;const mobile=innerWidth<=900,settings=cameraSettings();renderer.resize(r.width,r.height,Math.min(devicePixelRatio||1,mobile?1.6:1.65));renderer.height=Math.max(settings.height,settings.portraitHeight/(r.width/r.height));renderer.updateCamera();}
  const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);window.addEventListener('resize',resize);resize();updateUI();
  let last=performance.now(),loaded=false;
  function frame(now){const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;frameTime=dt;accumulatedRealTime+=dt;
   physics.update(dt);garden.update(dt,reducedMotion);
   if(winDelay>=0&&!winShown&&!physics.paused){winDelay+=dt;if(winDelay>1.35){winShown=true;openModal('win');}}
-  const eye=topView?[.01,36,4.0]:baseEye,tar=topView?[.25,.5,-.22]:baseTarget,f=reducedMotion?1:1-Math.exp(-dt*4);
+  const settings=cameraSettings(),eye=settings.eye,tar=settings.target,f=reducedMotion?1:1-Math.exp(-dt*4);
   renderer.eye=renderer.eye.map((v,i)=>v+(eye[i]-v)*f);renderer.target=renderer.target.map((v,i)=>v+(tar[i]-v)*f);
-  const desiredHeight=Math.max(topView?22.0:21.4,(topView?20.5:23.1)/(renderer.w/renderer.h));renderer.height+=(desiredHeight-renderer.height)*f;
+  const desiredHeight=Math.max(settings.height,settings.portraitHeight/(renderer.w/renderer.h));renderer.height+=(desiredHeight-renderer.height)*f;
   const bg=Garden3D.color(sunset?'#eee7dc':'#f3f0e5'),sun=sunset?[1.17,.88,.66]:[1.04,1.0,.86];renderer.background=renderer.background.map((v,i)=>v+(bg[i]-v)*f*.6);garden.floor.color=[...renderer.background];renderer.sun=renderer.sun.map((v,i)=>v+(sun[i]-v)*f*.6);
   renderer.render(garden.root);
   const note=$('ball-note'),showNote=physics.state==='ready'&&!physics.paused&&!$('modal').open;if(showNote){const [x,y]=renderer.project([5.13,1.15,6.25]);note.style.left=Math.min(renderer.w-note.offsetWidth-12,Math.max(12,x+9))+'px';note.style.top=Math.max(25,y-47)+'px';}note.style.opacity=showNote?'1':'0';
@@ -560,7 +564,7 @@ try{
  }
  raf=requestAnimationFrame(frame);
  // Read-only status for inspection. Mutation helpers exist only with ?test=1.
- window.gardenStatus=()=>({...physics.snapshot(),view:topView?'top':'isometric',sound:soundEnabled,light:sunset?'sunset':'day',zen});
+ window.gardenStatus=()=>({...physics.snapshot(),view:cameraMode(),sound:soundEnabled,light:sunset?'sunset':'day',zen});
  if(new URLSearchParams(location.search).has('test'))window.__gardenTest={physics,garden,renderer,advance(seconds){for(let t=0;t<seconds;t+=1/120){physics.update(1/120);garden.update(1/120,true);}updateUI();renderer.render(garden.root);return physics.snapshot();},reset,updateUI};
 }catch(error){console.error('Garden initialization failed:',error);$('loading').hidden=true;$('fallback').hidden=false;$('launch').disabled=true;$('launch-text').textContent='请先开启 3D 支持';$('retry').onclick=()=>location.reload();}
 })();
